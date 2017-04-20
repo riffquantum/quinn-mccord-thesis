@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageImport", "ImageImport.csproj", "{2DA8119F-30E1-60AF-823E-0EDE6139B7EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DA8119F-30E1-60AF-823E-0EDE6139B7EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA8119F-30E1-60AF-823E-0EDE6139B7EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA8119F-30E1-60AF-823E-0EDE6139B7EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA8119F-30E1-60AF-823E-0EDE6139B7EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

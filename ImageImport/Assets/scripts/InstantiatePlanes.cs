@@ -5,17 +5,23 @@ using UnityEngine;
 
 public class InstantiatePlanes : MonoBehaviour {
 
+    public GameObject zPlaneObj;
+    public Transform c1Plane;
+    public Transform c2Plane;
+
+
+    public float zValue;
+
     
-    public Transform zPlane;
-    public float zValue = 0.000981f;
+    
+    public Material[] c1Material;
+    //public Texture[] c1Texture;
+    public Material[] c2Material;
+    //public Texture[] c2Texture;
 
     //public string folderName;
     //public string imageSequenceName;
     //private string baseName;
-
-    public Material newMaterial;
-    public Texture[] newTexture;
-    
 
     /*
     //get number of images in folder
@@ -42,13 +48,41 @@ public class InstantiatePlanes : MonoBehaviour {
     
     // Use this for initialization
     void Start () {
-        for (int i= 0; i<= 24; i++)
+
+        //rend = GetComponent<Renderer>();
+        //rend.enabled = true;
+
+        for (int i= 0; i< c1Material.Length; i++)
         {
-            float newzValue = zValue*i;
+            float newzValue = zValue * i;
             //Debug.Log(newzValue);
-            Texture newMat = newMaterial.mainTexture = newTexture[i];
-            Instantiate(zPlane, new Vector3(0,newzValue,0), Quaternion.identity);
-            
+            //Texture newMat = c1Material[i].mainTexture = c1Texture[i];
+
+
+            //rend.material.mainTexture = newTexture[i];
+
+            //Instantiate(c1Plane, new Vector3(0, newzValue, 0), Quaternion.identity);
+
+
+            //Instantiate(c2Plane, new Vector3(0, newzValue, 0), Quaternion.identity);
+
+            for (int j = 0; j <= 19; j++) 
+            {
+                float dupZVal = newzValue + j;
+                GameObject c1plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                c1plane.transform.position = new Vector3(0, dupZVal, 0);
+                c1plane.transform.localScale = new Vector3(512, 0, 512);
+                Renderer rend = c1plane.GetComponent<Renderer>();
+                rend.material = new Material(c1Material[i]);
+
+
+                GameObject c2plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                c2plane.transform.position = new Vector3(0, dupZVal, 0);
+                c2plane.transform.localScale = new Vector3(512, 0, 512);
+                Renderer c2rend = c2plane.GetComponent<Renderer>();
+                c2rend.material = new Material(c2Material[i]);
+                
+            }
 
         }
 	}

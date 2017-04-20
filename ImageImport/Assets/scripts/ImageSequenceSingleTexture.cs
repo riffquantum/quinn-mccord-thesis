@@ -6,7 +6,7 @@ public class ImageSequenceSingleTexture : MonoBehaviour
     {
     //texture object that will output animation, gameobject's material, frames
     private Texture texture;
-    private Material goMaterial;
+    public Material newMaterial;
     private int frameCounter = 0;
     
 
@@ -21,7 +21,7 @@ public class ImageSequenceSingleTexture : MonoBehaviour
 
     private void Awake()
     {
-        goMaterial = GetComponent<Material>();
+        newMaterial = GetComponent<Material>();
         
         baseName = folderName + "/" + imageSequenceName;
     }
@@ -37,7 +37,7 @@ public class ImageSequenceSingleTexture : MonoBehaviour
         //start 'playloop' method as coroutine with 0.04 delay
         StartCoroutine("PlayLoop", 0.04f);
         //set materials texcture to current value of frameCount
-        goMaterial.mainTexture = texture; 
+        newMaterial.mainTexture = this.texture; 
 	}
 
     IEnumerator PlayLoop(float delay)
