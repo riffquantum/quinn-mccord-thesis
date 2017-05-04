@@ -5,15 +5,20 @@ using UnityEngine;
 
 public class InstantiatePlanes : MonoBehaviour {
 
+    private ImageSequenceSingleTexture mySequence;
     public GameObject zPlaneObj;
     public Transform c1Plane;
     public Transform c2Plane;
 
-
+    public Texture[] textures;
+    public int currentTexture;
     public float zValue;
 
-    
-    
+
+    //int frameCounter;
+    //int numberofFrames = 25;
+
+
     public Material[] c1Material;
     //public Texture[] c1Texture;
     public Material[] c2Material;
@@ -49,17 +54,12 @@ public class InstantiatePlanes : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        //rend = GetComponent<Renderer>();
-        //rend.enabled = true;
+        
 
         for (int i= 0; i< c1Material.Length; i++)
         {
             float newzValue = zValue * i;
-            //Debug.Log(newzValue);
-            //Texture newMat = c1Material[i].mainTexture = c1Texture[i];
-
-
-            //rend.material.mainTexture = newTexture[i];
+            
 
             //Instantiate(c1Plane, new Vector3(0, newzValue, 0), Quaternion.identity);
 
@@ -81,14 +81,41 @@ public class InstantiatePlanes : MonoBehaviour {
                 c2plane.transform.localScale = new Vector3(512, 0, 512);
                 Renderer c2rend = c2plane.GetComponent<Renderer>();
                 c2rend.material = new Material(c2Material[i]);
-                
+
+              
+
             }
+
+           
 
         }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+       /*
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+
+            currentTexture++;
+            currentTexture %= textures.Length;
+            
+            rend.material.mainTexture = textures[currentTexture];
+            Debug.Log(currentTexture);
+        }
+
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+
+
+
+
+
+        }
+        */
+
+    }
+
+    
 }
