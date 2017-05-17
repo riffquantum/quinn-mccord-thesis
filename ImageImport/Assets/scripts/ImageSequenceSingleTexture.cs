@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ImageSequenceSingleTexture : MonoBehaviour 
     {
+
+    private InstantiatePlanes myInstantiator;
     //texture object that will output animation, gameobject's material, frames
     private Texture texture;
     public Material newMaterial;
@@ -34,6 +36,28 @@ public class ImageSequenceSingleTexture : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            //if (frameCounter == numberofFrames)
+           // {
+                //frameCounter = 0;
+                frameCounter++;
+                Debug.Log(frameCounter);
+            //}
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+
+           // if (frameCounter == 0)
+           // {
+              //  frameCounter = numberofFrames;
+                frameCounter--;
+                Debug.Log(frameCounter);
+           // }
+            
+        }
+
         //start 'playloop' method as coroutine with 0.04 delay
         StartCoroutine("PlayLoop", 0.04f);
         //set materials texcture to current value of frameCount
@@ -48,7 +72,7 @@ public class ImageSequenceSingleTexture : MonoBehaviour
         frameCounter = (++frameCounter) % numberofFrames;
         //load current frame
         texture = (Texture)Resources.Load(baseName + frameCounter.ToString("D5"), typeof(Texture));
-        //stop coroutine
-        StopCoroutine("PlayLoop");
+		newMaterial.mainTexture = this.texture; 
+        
     }
 }
