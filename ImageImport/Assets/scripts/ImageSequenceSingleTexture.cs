@@ -59,7 +59,7 @@ public class ImageSequenceSingleTexture : MonoBehaviour
         }
 
         //start 'playloop' method as coroutine with 0.04 delay
-        StartCoroutine("PlayLoop", 0.04f);
+        StartCoroutine("PlayLoop");
         //set materials texcture to current value of frameCount
         newMaterial.mainTexture = this.texture; 
 	}
@@ -72,7 +72,7 @@ public class ImageSequenceSingleTexture : MonoBehaviour
         frameCounter = (++frameCounter) % numberofFrames;
         //load current frame
         texture = (Texture)Resources.Load(baseName + frameCounter.ToString("D5"), typeof(Texture));
-        //stop coroutine
-        StopCoroutine("PlayLoop");
+		newMaterial.mainTexture = this.texture; 
+        
     }
 }

@@ -1,7 +1,11 @@
 fileFormatVersion: 2
 guid: 13b46f7d8800fe64588603129c3f17dd
 folderAsset: yes
+<<<<<<< HEAD:ImageImport/Assets/Resources/z1c1.meta
 timeCreated: 1493875349
+=======
+timeCreated: 1493916354
+>>>>>>> b87bca9139b44bc7ee076cc072719c0c096208fc:ImageImport/Assets/Resources/z1c1.meta
 licenseType: Free
 DefaultImporter:
   userData: 
