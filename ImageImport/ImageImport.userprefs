@@ -2,8 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/InstantiatePlanes.cs">
     <Files>
-      <File FileName="Assets/scripts/InstantiatePlanes.cs" Line="8" Column="45" />
-      <File FileName="Assets/scripts/ImageSequenceSingleTexture.cs" Line="5" Column="1" />
+      <File FileName="Assets/scripts/InstantiatePlanes.cs" Line="78" Column="36" />
+      <File FileName="Assets/scripts/ImageSequenceSingleTexture.cs" Line="34" Column="76" />
+      <File FileName="Assets/scripts/TrackPadRotate.cs" Line="46" Column="5" />
+      <File FileName="Assets/Resources/Susan_overnight/Susan_overnight.txt" Line="2" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

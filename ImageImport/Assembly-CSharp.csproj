@@ -48,6 +48,8 @@
   <ItemGroup>
      <Compile Include="Assets\scripts\ImageSequenceSingleTexture.cs" />
      <Compile Include="Assets\scripts\InstantiatePlanes.cs" />
+     <Compile Include="Assets\scripts\TrackPadRotate.cs" />
+     <None Include="Assets\Resources\Susan_overnight\Susan_overnight.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
