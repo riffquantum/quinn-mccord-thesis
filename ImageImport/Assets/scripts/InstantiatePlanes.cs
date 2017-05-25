@@ -17,60 +17,59 @@ public class InstantiatePlanes : MonoBehaviour {
     public Color myColor2;
     public Texture[, ,] textures;
     public Texture currentTexture;
-    public float zValue;
+    public float zSpacing = 0.9f;
+	public int numPlanesPerTex = 10;
 
 
-    int frameCounter = 0;
+    public int frameCounter = 1;
     
     public string folderName;
 	public string baseName = "Susan_overnight";
 	private string imgSuffix = "_c{0:d2}_t{1:d4}_z{2:d4}";
-	
 
+	private int maxChannel = 0;
+	private int maxTime = 0;
+	private int maxZ = 0;
 
-	
+	private int getREGEXValueFromText(string txtContents, string matchstring) {
+		Regex regChan = new Regex (matchstring, RegexOptions.IgnoreCase);
+		Match matChan = regChan.Match (txtContents);
+		Debug.Log (matChan.Groups [1].Value);
+		return int.Parse (matChan.Groups [1].Value);
+	}
 
 	public IEnumerator ReadTexturesFromFolder()
-    {
-		yield return null;
-		
+	{
+		yield return null;		
 		// Read .txt file
 		//TODO read whole contents of text file
 		string filename = folderName + "/" + baseName;
 		Debug.Log (filename);
-		TextAsset txtAssets = Resources.Load<TextAsset>(filename);
+		TextAsset txtAssets = Resources.Load<TextAsset> (filename);
 		string txtContents = txtAssets.text;
 
-        Regex regChan = new Regex("NumberOfChannels:(\\d+)", RegexOptions.IgnoreCase);
-		Match matChan = regChan.Match(txtContents);
-		Debug.Log (matChan.Groups[1].Value);
-		int maxChannel = int.Parse(matChan.Groups[1].Value);
-        
-        Regex regTime = new Regex("NumberOfFrames:(\\d+)", RegexOptions.IgnoreCase);
-        Match matTime = regTime.Match(txtContents);
-        Debug.Log(matChan.Groups[1].Value);
-        int maxTime = int.Parse(matTime.Groups[1].Value);
+		maxChannel = getREGEXValueFromText (txtContents, "NumberOfChannels:(\\d+)");
+		maxTime = getREGEXValueFromText (txtContents, "NumberOfFrames:(\\d+)");
+		maxZ = getREGEXValueFromText (txtContents, "ZDimension:(\\d+)");
 
-        Regex regZ = new Regex("ZDimension:(\\d+)", RegexOptions.IgnoreCase);
-        Match matZ = regZ.Match(txtContents);
-        Debug.Log(matZ.Groups[1].Value);
-        int maxZ = int.Parse(matZ.Groups[1].Value);
-
-        // Get max number of channels, time-values, and z-values from that file
-        Debug.Log("Read from file: channels " + maxChannel);
-        Debug.Log("Read from file: frames " + maxTime);
-        Debug.Log("Read from file: Z " + maxZ);
+		// Get max number of channels, time-values, and z-values from that file
+		Debug.Log ("Read from file: channels " + maxChannel);
+		Debug.Log ("Read from file: frames " + maxTime);
+		Debug.Log ("Read from file: Z " + maxZ);
         
-        yield return null;
+		yield return null;
 		// Initialize the textures data structure to that size
-		this.textures = new Texture[maxChannel,maxTime,maxZ];
+		this.textures = new Texture[maxChannel, maxTime, maxZ];
 
+		yield return StartCoroutine (LoadTextures (maxChannel, maxTime, maxZ));
+	}
+
+	private IEnumerator LoadTextures(int maxChannel, int maxTime, int maxZ) {
 		// Go through files and read in textures
-		for (int chindex = 1; chindex <= maxChannel; chindex++)
+		for (int timeindex = 1; timeindex <= maxTime; timeindex++)
 		{
-			for (int timeindex = 1; timeindex <= maxTime; timeindex++)
+			for (int chindex = 1; chindex <= maxChannel; chindex++)
 			{
-
                 for (int zindex = 1; zindex <= maxZ; zindex++)
 				{
 					//construct the filename:
@@ -80,88 +79,60 @@ public class InstantiatePlanes : MonoBehaviour {
 					Texture newtexture = Resources.Load<Texture>(currentTexFilename);
 					Debug.Log ("Loaded " + newtexture);
 					textures[chindex - 1, timeindex - 1, zindex - 1] = newtexture;
-                    
+					// texture loaded, wait then check if it's one that should be displayed ASAP
                     yield return new WaitForSeconds(0.01f);
-                    // now check if this texture is one that should be displayed right now: is time=0???
-                    // if so, set it on the right material/planes
-
-
-                    if (chindex == 1)
-                    {
-                        GameObject c1plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                        c1plane.transform.position = new Vector3(0, 0, 0);
-                        c1plane.transform.localScale = new Vector3(512, 0, 512);
-                        Renderer rend = c1plane.GetComponent<Renderer>();
-                        rend.material.SetTexture("_MainTex", textures[chindex - 1, timeindex - 1, zindex - 1]);
-                        rend.material.shader = myShader;
-                        rend.material.color = myColor;
-                    }else if (chindex == 2)
-                    {
-                        GameObject c2plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                        c2plane.transform.position = new Vector3(0, 0, 0);
-                        c2plane.transform.localScale = new Vector3(512, 0, 512);
-                        Renderer rend = c2plane.GetComponent<Renderer>();
-                        rend.material.SetTexture("_MainTex", newtexture);
-                        rend.material.shader = myShader;
-                        rend.material.color = myColor2;
-                    }
-                    /*
-                    if (frameCounter == 0 && timeindex == 1)
-                    {
-                        currentTexture = textures[0, 0, 0];
-                    }
-                    */
                 }
-			}
-            
-        }
-        
+			}            
+        }        
         // Then you'll be able to access any texture with three indices:
         //newTex = textures[channelnum, timenum, znum]
-
     }
+		
 
-    public void LoadPlanes()
-    {
-        for (int i = 0; i < 25; i++)
-        {
-            float newzValue = zValue * i;
+	private IEnumerator CreatePlanes() {
+		while (maxZ == 0) {
+			yield return new WaitForSeconds (0.1f);
+		}
+		for (int chindex = 1; chindex <= maxChannel; chindex++)
+		{
+			for (int zindex = 1; zindex <= maxZ; zindex++)
+			{
+				Texture newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
+				while (newTexture == null) {
+					Debug.Log ("CreatePlanes has to wait for texture loading");
+					yield return new WaitForSeconds (0.01f);
+				}
+				// positioning of planes:
+				float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
+				for (int i = 0; i < numPlanesPerTex; i++) {
+					float newzValue = newbasezValue + (i * (zSpacing / numPlanesPerTex));
+					GameObject c1plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+					c1plane.transform.position = new Vector3(0, newzValue, 0);
+					c1plane.transform.localScale = new Vector3(512, 0, 512);
+					Renderer rend = c1plane.GetComponent<Renderer>();
+					rend.material.SetTexture("_MainTex", newTexture);
+					rend.material.shader = myShader;
+					if (chindex == 1)
+					{                        
+						rend.material.color = myColor;
+					} else if (chindex == 2)
+					{
+						rend.material.color = myColor2;
+					}
+					yield return new WaitForSeconds(0.01f);
+				}
+			}
+		}            
+	}
 
-            for (int j = 0; j <= 19; j++)
-            {
-                float dupZVal = newzValue + j;
-                GameObject c1plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                c1plane.transform.position = new Vector3(0, dupZVal, 0);
-                c1plane.transform.localScale = new Vector3(512, 0, 512);
-                Renderer rend = GetComponent<Renderer>();
-                
 
-
-                GameObject c2plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                c2plane.transform.position = new Vector3(0, dupZVal, 0);
-                c2plane.transform.localScale = new Vector3(512, 0, 512);
-                Renderer c2rend = GetComponent<Renderer>();
-                
-
-
-
-            }
-
-
-
-        }
-
-    }
-    // Use this for initialization
-    void Start () {
+	void Start () {
 		
 		StartCoroutine(ReadTexturesFromFolder());
 
-        //LoadPlanes();
+		StartCoroutine(CreatePlanes());
 
-           
-
-        }
+    }
 	
 	
 	// Update is called once per frame
@@ -175,12 +146,14 @@ public class InstantiatePlanes : MonoBehaviour {
 
             frameCounter++;
             Debug.Log(frameCounter);
+			//StartCoroutine(SetTexturesToPlanes());
         }
 
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             frameCounter--;
             Debug.Log(frameCounter);
+			//StartCoroutine(SetTexturesToPlanes());
         }
 
 
