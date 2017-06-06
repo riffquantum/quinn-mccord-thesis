@@ -13,8 +13,7 @@ public class InstantiatePlanes : MonoBehaviour {
 
 
     public Shader myShader;
-    public Color myColor;
-    public Color myColor2;
+    public Color[] channelColor;
     public Texture[, ,] textures;
     public Texture currentTexture;
     public float zSpacing = 0.9f;
@@ -52,8 +51,10 @@ public class InstantiatePlanes : MonoBehaviour {
 		maxTime = getREGEXValueFromText (txtContents, "NumberOfFrames:(\\d+)");
 		maxZ = getREGEXValueFromText (txtContents, "ZDimension:(\\d+)");
 
-		// Get max number of channels, time-values, and z-values from that file
-		Debug.Log ("Read from file: channels " + maxChannel);
+        
+
+        // Get max number of channels, time-values, and z-values from that file
+        Debug.Log ("Read from file: channels " + maxChannel);
 		Debug.Log ("Read from file: frames " + maxTime);
 		Debug.Log ("Read from file: Z " + maxZ);
         
@@ -115,13 +116,11 @@ public class InstantiatePlanes : MonoBehaviour {
 					Renderer rend = c1plane.GetComponent<Renderer>();
 					rend.material.SetTexture("_MainTex", newTexture);
 					rend.material.shader = myShader;
-					if (chindex == 1)
-					{                        
-						rend.material.color = myColor;
-					} else if (chindex == 2)
-					{
-						rend.material.color = myColor2;
-					}
+					
+                    rend.material.color = channelColor[chindex];
+                    
+
+
 					yield return null;
 				}
 			}
@@ -136,19 +135,18 @@ public class InstantiatePlanes : MonoBehaviour {
         {
             for (int zindex = 1; zindex <= maxZ; zindex++)
             {
-                
-                
-                // positioning of planes:
-                float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
+               
                 for (int i = 0; i < numPlanesPerTex; i++)
                 {
                     Texture newTexture = textures[chindex - 1, thisFrameCounter-1, zindex - 1];
+
                     Renderer rend = GetComponent<Renderer>();
                     rend.material.SetTexture("_MainTex", newTexture);
                     
                     while (newTexture == null)
                     {
                         Debug.Log("SetTexturesToPlanes has to wait for texture loading");
+                        
                         yield return new WaitForSeconds(0.01f);
                     }
 
@@ -156,7 +154,7 @@ public class InstantiatePlanes : MonoBehaviour {
             }
             
         }
-       
+        
     }
 
 	void Start () {
@@ -181,6 +179,7 @@ public class InstantiatePlanes : MonoBehaviour {
             }
             Debug.Log(frameCounter);
 			StartCoroutine(SetTexturesToPlanes(frameCounter));
+            Debug.Log("running set texture co routine");
         }
 
         else if (Input.GetKeyDown(KeyCode.LeftArrow))

@@ -186,8 +186,13 @@ MonoBehaviour:
   c1Plane: {fileID: 4681140632283824, guid: 4a00b3f1de72d084d974bc796a27170b, type: 2}
   c2Plane: {fileID: 4681140632283824, guid: 4a00b3f1de72d084d974bc796a27170b, type: 2}
   myShader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  myColor: {r: 0, g: 1, b: 0, a: 0.522}
-  myColor2: {r: 1, g: 0, b: 0, a: 0.528}
+  channelColor:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0.08965516, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  - {r: 1, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0.95862055, b: 1, a: 1}
   currentTexture: {fileID: 0}
   zSpacing: 9.81
   numPlanesPerTex: 4
