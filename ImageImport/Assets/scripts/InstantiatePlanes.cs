@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -10,7 +11,7 @@ public class InstantiatePlanes : MonoBehaviour {
     public GameObject zPlaneObj;
     public Transform c1Plane;
     public Transform c2Plane;
-
+	public Text UIfeedbackText;
 
     public Shader myShader;
     public Color[] channelColor;
@@ -29,6 +30,10 @@ public class InstantiatePlanes : MonoBehaviour {
 	private int maxChannel = 0;
 	private int maxTime = 0;
 	private int maxZ = 0;
+
+	private IEnumerator textureSettingCoroutine = null;
+
+	public List<GameObject> allPlanes = new List<GameObject> ();
 
 	private int getREGEXValueFromText(string txtContents, string matchstring) {
 		Regex regChan = new Regex (matchstring, RegexOptions.IgnoreCase);
@@ -67,6 +72,8 @@ public class InstantiatePlanes : MonoBehaviour {
 
 	private IEnumerator LoadTextures(int maxChannel, int maxTime, int maxZ)
     {
+		int totalTexToLoad = maxTime * maxChannel * maxZ;
+		int loadedNum = 0;
 		// Go through files and read in textures
 		for (int timeindex = 1; timeindex <= maxTime; timeindex++)
 		{
@@ -81,10 +88,15 @@ public class InstantiatePlanes : MonoBehaviour {
 					Texture newtexture = Resources.Load<Texture>(currentTexFilename);
 					//Debug.Log ("Loaded " + newtexture);
 					textures[chindex - 1, timeindex - 1, zindex - 1] = newtexture;
+					loadedNum++;
 					// texture loaded, wait then check if it's one that should be displayed ASAP
-                    yield return new WaitForSeconds(0.01f);
+                    //yield return new WaitForSeconds(0.01f);
+					yield return null;
                 }
-			}            
+				if (UIfeedbackText != null) {
+					UIfeedbackText.text = "Loaded " + loadedNum + " of " + totalTexToLoad + " textures";
+				}
+			}
         }
         // Then you'll be able to access any texture with three indices:
         //Texture newTex = textures[channelnum, timenum, znum];
@@ -99,62 +111,71 @@ public class InstantiatePlanes : MonoBehaviour {
 		}
 		for (int chindex = 1; chindex <= maxChannel; chindex++)
 		{
+			GameObject channelObject = new GameObject ("Channel " + chindex);
+			channelObject.transform.SetParent (gameObject.transform);
 			for (int zindex = 1; zindex <= maxZ; zindex++)
 			{
+				GameObject zObject = new GameObject ("ZLevel " + zindex);
+				zObject.transform.SetParent (channelObject.transform);
 				Texture newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
 				while (newTexture == null) {
 					Debug.Log ("CreatePlanes has to wait for texture loading");
 					yield return new WaitForSeconds (0.01f);
+					newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
 				}
 				// positioning of planes:
 				float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
 				for (int i = 0; i < numPlanesPerTex; i++) {
 					float newzValue = newbasezValue + (i * (zSpacing / numPlanesPerTex));
-					GameObject c1plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-					c1plane.transform.position = new Vector3(0, newzValue, 0);
-					c1plane.transform.localScale = new Vector3(512, 0, 512);
-					Renderer rend = c1plane.GetComponent<Renderer>();
+					GameObject instantiatedPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+					instantiatedPlane.name = "Plane ch " + chindex + " z " + zindex + " i " + i;
+					allPlanes.Add (instantiatedPlane.gameObject);
+					instantiatedPlane.transform.position = new Vector3(0, newzValue, 0);
+					instantiatedPlane.transform.localScale = new Vector3(512, 0, 512);
+					Renderer rend = instantiatedPlane.GetComponent<Renderer>();
 					rend.material.SetTexture("_MainTex", newTexture);
 					rend.material.shader = myShader;
-					
                     rend.material.color = channelColor[chindex];
-                    
-
-
-					yield return null;
+					instantiatedPlane.transform.SetParent (zObject.transform);
 				}
+				yield return null;
 			}
-		}            
+		}   
+		Debug.Log ("Created " + allPlanes.Count + " planes");
 	}
 
-    private IEnumerator SetTexturesToPlanes(int frameCounter)
+    private IEnumerator SetTexturesToPlanes(int newFrameCounter)
     {
+		while (maxZ == 0 || allPlanes.Count != (maxZ * maxChannel * numPlanesPerTex)) {
+			Debug.Log ("Not all planes have been created yet");
+			yield return new WaitForSeconds (0.01f);
+		}
+		List<GameObject>.Enumerator planeEnum = allPlanes.GetEnumerator();
 
-        int thisFrameCounter = frameCounter;
         for (int chindex = 1; chindex <= maxChannel; chindex++)
         {
             for (int zindex = 1; zindex <= maxZ; zindex++)
             {
-               
-                for (int i = 0; i < numPlanesPerTex; i++)
-                {
-                    Texture newTexture = textures[chindex - 1, thisFrameCounter-1, zindex - 1];
-
-                    Renderer rend = GetComponent<Renderer>();
-                    rend.material.SetTexture("_MainTex", newTexture);
-                    
-                    while (newTexture == null)
-                    {
-                        Debug.Log("SetTexturesToPlanes has to wait for texture loading");
-                        
-                        yield return new WaitForSeconds(0.01f);
-                    }
-
+				Texture newTexture = textures[chindex - 1, newFrameCounter - 1, zindex - 1];
+				if (newTexture == null) {
+					Debug.Log ("SetTexturesToPlanes has to wait for texture loading (ch " + chindex + " z " + zindex + ")");
+					while (newTexture == null) {
+						yield return new WaitForSeconds (0.01f);
+						newTexture = textures [chindex - 1, newFrameCounter - 1, zindex - 1];
+					}
+				}
+				for (int i = 0; i < numPlanesPerTex; i++)
+                {					
+					//Debug.Log("chindex = " + chindex + ", zindex = " + zindex + ", numPlanesPerTex = " + i + ", frameCounter = " + newFrameCounter);
+					// move the enum one forward, trusting that it contains exactly the right number of planes:
+					planeEnum.MoveNext ();
+					Renderer rend = planeEnum.Current.GetComponent<Renderer> ();
+					rend.material.SetTexture("_MainTex", newTexture);
                 }
             }
-            
-        }
-        
+        }        
+		yield return null;
+		textureSettingCoroutine = null;
     }
 
 	void Start () {
@@ -168,20 +189,18 @@ public class InstantiatePlanes : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		if (maxZ == 0) {
+			return;
+		}
         if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            
+        {            
             frameCounter++;
             if (frameCounter > maxTime)
             {
                 frameCounter = 1;
             }
-            Debug.Log(frameCounter);
-			StartCoroutine(SetTexturesToPlanes(frameCounter));
-            Debug.Log("running set texture co routine");
+			StartNewTextureCoroutine (frameCounter);
         }
-
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             frameCounter--;
@@ -189,12 +208,18 @@ public class InstantiatePlanes : MonoBehaviour {
             {
                 frameCounter = maxTime;
             }
-            Debug.Log(frameCounter);
-			StartCoroutine(SetTexturesToPlanes(frameCounter));
+			StartNewTextureCoroutine (frameCounter);
         }
-
-
     }
 
+	void StartNewTextureCoroutine(int newFrameCounter) {
+		Debug.Log("Setting frameCounter to " + frameCounter);
+		if (textureSettingCoroutine != null) {
+			Debug.Log ("Stopping existing texture setting coroutine");
+			StopCoroutine (textureSettingCoroutine);
+		}
+		textureSettingCoroutine = SetTexturesToPlanes(frameCounter);
+		StartCoroutine (textureSettingCoroutine);
+	}
     
 }
