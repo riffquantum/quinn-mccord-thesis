@@ -131,7 +131,7 @@ public class InstantiatePlanes : MonoBehaviour {
 					instantiatedPlane.name = "Plane ch " + chindex + " z " + zindex + " i " + i;
 					allPlanes.Add (instantiatedPlane.gameObject);
 					instantiatedPlane.transform.position = new Vector3(0, newzValue, 0);
-					instantiatedPlane.transform.localScale = new Vector3(512, 0, 512);
+					instantiatedPlane.transform.localScale = new Vector3(128, 0, 128);
 					Renderer rend = instantiatedPlane.GetComponent<Renderer>();
 					rend.material.SetTexture("_MainTex", newTexture);
 					rend.material.shader = myShader;
