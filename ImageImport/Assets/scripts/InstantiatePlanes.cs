@@ -12,14 +12,14 @@ public class InstantiatePlanes : MonoBehaviour {
     public Transform c1Plane;
     public Transform c2Plane;
 	public Text UIfeedbackText;
-
+    
     public Shader myShader;
     public Color[] channelColor;
     public Texture[, ,] textures;
-    public Texture currentTexture;
-    public float zSpacing = 0.9f;
+    
+    public float zScaleFactor = 100f;
 	public int numPlanesPerTex = 10;
-
+    public float xyScaleFactor = 120f;
 
     public int frameCounter = 1;
     
@@ -30,19 +30,34 @@ public class InstantiatePlanes : MonoBehaviour {
 	private int maxChannel = 0;
 	private int maxTime = 0;
 	private int maxZ = 0;
+    private int xDim = 0;
+    private int yDim = 0;
+    private float xPixSize = 0;
+    private float yPixSize = 0;
+    private float zPixSize = 0;
 
-	private IEnumerator textureSettingCoroutine = null;
+
+    private IEnumerator textureSettingCoroutine = null;
 
 	public List<GameObject> allPlanes = new List<GameObject> ();
 
-	private int getREGEXValueFromText(string txtContents, string matchstring) {
+	private string getREGEXValueFromText(string txtContents, string matchstring) {
 		Regex regChan = new Regex (matchstring, RegexOptions.IgnoreCase);
 		Match matChan = regChan.Match (txtContents);
 		Debug.Log (matChan.Groups [1].Value);
-		return int.Parse (matChan.Groups [1].Value);
+		return matChan.Groups[1].Value;
 	}
 
-	public IEnumerator ReadTexturesFromFolder()
+    private int getIntValueFromText(string txtContents, string matchstring) {
+        return int.Parse(getREGEXValueFromText(txtContents, matchstring));
+    }
+
+    private float getFloatValueFromText(string txtContents, string matchstring)
+    {
+        return float.Parse(getREGEXValueFromText(txtContents, matchstring));
+    }
+
+    public IEnumerator ReadTexturesFromFolder()
 	{
 		yield return null;		
 		// Read .txt file
@@ -52,18 +67,24 @@ public class InstantiatePlanes : MonoBehaviour {
 		TextAsset txtAssets = Resources.Load<TextAsset> (filename);
 		string txtContents = txtAssets.text;
 
-		maxChannel = getREGEXValueFromText (txtContents, "NumberOfChannels:(\\d+)");
-		maxTime = getREGEXValueFromText (txtContents, "NumberOfFrames:(\\d+)");
-		maxZ = getREGEXValueFromText (txtContents, "ZDimension:(\\d+)");
+		maxChannel = getIntValueFromText(txtContents, "NumberOfChannels:(\\d+)");
+		maxTime = getIntValueFromText(txtContents, "NumberOfFrames:(\\d+)");
+		maxZ = getIntValueFromText(txtContents, "ZDimension:(\\d+)");
+        xDim = getIntValueFromText(txtContents, "XDimension:(\\d+)");
+        yDim = getIntValueFromText(txtContents, "YDimension:(\\d+)");
+        xPixSize = getFloatValueFromText(txtContents, "XPixelPhysicalSize:([\\d\\.]+)");
+        yPixSize = getFloatValueFromText(txtContents, "YPixelPhysicalSize:([\\d\\.]+)");
+        zPixSize = getFloatValueFromText(txtContents, "ZPixelPhysicalSize:([\\d\\.]+)");
 
-        
 
         // Get max number of channels, time-values, and z-values from that file
         Debug.Log ("Read from file: channels " + maxChannel);
 		Debug.Log ("Read from file: frames " + maxTime);
 		Debug.Log ("Read from file: Z " + maxZ);
-        
-		yield return null;
+        Debug.Log("Read from file: xy dimensions " + xDim + " " + yDim);
+        Debug.Log("Read from file: xyz pixel size " + xPixSize + " " + yPixSize + " " + zPixSize);
+
+        yield return null;
 		// Initialize the textures data structure to that size
 		textures = new Texture[maxChannel, maxTime, maxZ];
 
@@ -109,7 +130,18 @@ public class InstantiatePlanes : MonoBehaviour {
 		while (maxZ == 0) {
 			yield return new WaitForSeconds (0.1f);
 		}
-		for (int chindex = 1; chindex <= maxChannel; chindex++)
+        float zSpacing = zPixSize * zScaleFactor;
+        // 10x10 default plane:
+        float xPlaneScale = xPixSize * xyScaleFactor * xDim / 10f;
+        float yPlaneScale = yPixSize * xyScaleFactor * yDim / 10f;
+        
+        /*// size and position the particle system:
+        ParticleSystem ps = GetComponentInChildren<ParticleSystem>();
+        ParticleSystem.ShapeModule shap = ps.shape;
+        shap.box = new Vector3(xPlaneScale * 10f, zSpacing * maxZ, yPlaneScale * 10f);
+        ps.gameObject.transform.localPosition = new Vector3(0f, zSpacing * maxZ / 2f, 0f);
+        */
+        for (int chindex = 1; chindex <= maxChannel; chindex++)
 		{
 			GameObject channelObject = new GameObject ("Channel " + chindex);
 			channelObject.transform.SetParent (gameObject.transform);
@@ -131,12 +163,16 @@ public class InstantiatePlanes : MonoBehaviour {
 					instantiatedPlane.name = "Plane ch " + chindex + " z " + zindex + " i " + i;
 					allPlanes.Add (instantiatedPlane.gameObject);
 					instantiatedPlane.transform.position = new Vector3(0, newzValue, 0);
-					instantiatedPlane.transform.localScale = new Vector3(128, 0, 128);
+					instantiatedPlane.transform.localScale = new Vector3(xPlaneScale, 0, yPlaneScale);
 					Renderer rend = instantiatedPlane.GetComponent<Renderer>();
 					rend.material.SetTexture("_MainTex", newTexture);
 					rend.material.shader = myShader;
                     rend.material.color = channelColor[chindex];
 					instantiatedPlane.transform.SetParent (zObject.transform);
+                    
+                    // test adding a static particle system in the same plane
+                    
+
 				}
 				yield return null;
 			}
