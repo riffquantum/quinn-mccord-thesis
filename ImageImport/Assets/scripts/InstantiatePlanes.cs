@@ -213,8 +213,8 @@ public class InstantiatePlanes : MonoBehaviour {
 		yield return null;
 		textureSettingCoroutine = null;
     }
-
-	void Start () {
+    
+    void Start () {
 		
 		StartCoroutine(ReadTexturesFromFolder());
 
@@ -222,14 +222,13 @@ public class InstantiatePlanes : MonoBehaviour {
 
     }
 	
-	
 	// Update is called once per frame
 	void Update () {
 		if (maxZ == 0) {
 			return;
 		}
         if (Input.GetKeyDown(KeyCode.RightArrow))
-        {            
+        {     
             frameCounter++;
             if (frameCounter > maxTime)
             {
