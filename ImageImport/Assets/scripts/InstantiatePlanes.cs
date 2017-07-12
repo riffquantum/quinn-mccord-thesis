@@ -246,6 +246,24 @@ public class InstantiatePlanes : MonoBehaviour {
 			StartNewTextureCoroutine (frameCounter);
         }
     }
+    void plusFC()
+    {
+        frameCounter++;
+        if (frameCounter > maxTime)
+        {
+            frameCounter = 1;
+        }
+        StartNewTextureCoroutine(frameCounter);
+    }
+    void minusFC()
+    {
+        frameCounter--;
+        if (frameCounter < 1)
+        {
+            frameCounter = maxTime;
+        }
+        StartNewTextureCoroutine(frameCounter);
+    }
 
 	void StartNewTextureCoroutine(int newFrameCounter) {
 		Debug.Log("Setting frameCounter to " + frameCounter);
