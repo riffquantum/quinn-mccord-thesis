@@ -4,15 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System.Text.RegularExpressions;
+using VRTK;
 
 public class InstantiatePlanes : MonoBehaviour {
-
-    
-    public GameObject zPlaneObj;
-    public Transform c1Plane;
-    public Transform c2Plane;
 	public Text UIfeedbackText;
-    
+    public Text ErrorText;
+    public Text FrameCounterText;
     public Shader myShader;
     public Color[] channelColor;
     public Texture[, ,] textures;
@@ -152,14 +149,16 @@ public class InstantiatePlanes : MonoBehaviour {
 				Texture newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
 				while (newTexture == null) {
 					Debug.Log ("CreatePlanes has to wait for texture loading");
-					yield return new WaitForSeconds (0.01f);
-					newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
-				}
-				// positioning of planes:
-				float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
+                    yield return new WaitForSeconds (0.01f);
+                    newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
+                }
+                
+                // positioning of planes:
+                float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
 				for (int i = 0; i < numPlanesPerTex; i++) {
 					float newzValue = newbasezValue + (i * (zSpacing / numPlanesPerTex));
 					GameObject instantiatedPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    Destroy(instantiatedPlane.GetComponent<MeshCollider>());
 					instantiatedPlane.name = "Plane ch " + chindex + " z " + zindex + " i " + i;
 					allPlanes.Add (instantiatedPlane.gameObject);
 					instantiatedPlane.transform.position = new Vector3(0, newzValue, 0);
@@ -196,10 +195,16 @@ public class InstantiatePlanes : MonoBehaviour {
 				if (newTexture == null) {
 					Debug.Log ("SetTexturesToPlanes has to wait for texture loading (ch " + chindex + " z " + zindex + ")");
 					while (newTexture == null) {
-						yield return new WaitForSeconds (0.01f);
+                        if (ErrorText != null)
+                        {
+                            ErrorText.text = "Wait for texture to load";
+                        }
+                        yield return new WaitForSeconds (0.01f);
 						newTexture = textures [chindex - 1, newFrameCounter - 1, zindex - 1];
+                        
 					}
-				}
+                    ErrorText.text = "";
+                }
 				for (int i = 0; i < numPlanesPerTex; i++)
                 {					
 					//Debug.Log("chindex = " + chindex + ", zindex = " + zindex + ", numPlanesPerTex = " + i + ", frameCounter = " + newFrameCounter);
@@ -221,9 +226,41 @@ public class InstantiatePlanes : MonoBehaviour {
 		StartCoroutine(CreatePlanes());
 
     }
-	
-	// Update is called once per frame
-	void Update () {
+	public void frameForward()
+    {
+        
+        frameCounter++;
+        if (frameCounter > maxTime)
+        {
+            frameCounter = 1;
+        }
+        StartNewTextureCoroutine(frameCounter);
+    }
+
+    public void frameBack()
+    {
+        frameCounter--;
+        if (frameCounter < 1)
+        {
+            frameCounter = maxTime;
+        }
+        StartNewTextureCoroutine(frameCounter);
+    }
+    public void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
+    {
+        //DebugLogger(VRTK_ControllerReference.GetRealIndex(e.controllerReference), "TOUCHPAD", "pressed down", e);
+        if (e.touchpadAxis.x > 0)
+        {
+            frameForward();
+        }
+        else if (e.touchpadAxis.x < 0)
+        {
+            frameBack();
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
 		if (maxZ == 0) {
 			return;
 		}
@@ -246,27 +283,11 @@ public class InstantiatePlanes : MonoBehaviour {
 			StartNewTextureCoroutine (frameCounter);
         }
     }
-    void plusFC()
-    {
-        frameCounter++;
-        if (frameCounter > maxTime)
-        {
-            frameCounter = 1;
-        }
-        StartNewTextureCoroutine(frameCounter);
-    }
-    void minusFC()
-    {
-        frameCounter--;
-        if (frameCounter < 1)
-        {
-            frameCounter = maxTime;
-        }
-        StartNewTextureCoroutine(frameCounter);
-    }
+    
 
 	void StartNewTextureCoroutine(int newFrameCounter) {
 		Debug.Log("Setting frameCounter to " + frameCounter);
+        
 		if (textureSettingCoroutine != null) {
 			Debug.Log ("Stopping existing texture setting coroutine");
 			StopCoroutine (textureSettingCoroutine);
