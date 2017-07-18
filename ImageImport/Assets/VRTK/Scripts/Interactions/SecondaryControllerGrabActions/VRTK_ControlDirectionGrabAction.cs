@@ -185,5 +185,9 @@ namespace VRTK.SecondaryControllerGrabActions
             // assign the one that involves less change to roll
             grabbedObject.transform.rotation = (upLockedAngle < rightLockedAngle ? upLocked : rightLocked);
         }
+
+
     }
+    
+    
 }
