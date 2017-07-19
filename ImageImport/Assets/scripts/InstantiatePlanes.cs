@@ -131,13 +131,19 @@ public class InstantiatePlanes : MonoBehaviour {
         // 10x10 default plane:
         float xPlaneScale = xPixSize * xyScaleFactor * xDim / 10f;
         float yPlaneScale = yPixSize * xyScaleFactor * yDim / 10f;
-        
-        /*// size and position the particle system:
+
+        // size and position the box collider and particle system:
+        Vector3 newSize = new Vector3(xPlaneScale * 10f, zSpacing * maxZ, yPlaneScale * 10f);
         ParticleSystem ps = GetComponentInChildren<ParticleSystem>();
+        /*
         ParticleSystem.ShapeModule shap = ps.shape;
-        shap.box = new Vector3(xPlaneScale * 10f, zSpacing * maxZ, yPlaneScale * 10f);
+        shap.box = newSize;
         ps.gameObject.transform.localPosition = new Vector3(0f, zSpacing * maxZ / 2f, 0f);
         */
+        BoxCollider bc = GetComponentInChildren<BoxCollider>();
+        bc.size = newSize;
+        bc.center = new Vector3(0f, newSize.y / 2f, 0f);
+        
         for (int chindex = 1; chindex <= maxChannel; chindex++)
 		{
 			GameObject channelObject = new GameObject ("Channel " + chindex);
