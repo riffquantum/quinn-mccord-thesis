@@ -140,10 +140,16 @@ public class InstantiatePlanes : MonoBehaviour {
         shap.box = newSize;
         ps.gameObject.transform.localPosition = new Vector3(0f, zSpacing * maxZ / 2f, 0f);
         */
+        Vector3 newCenter = new Vector3(0f, newSize.y / 2f, 0f);
         BoxCollider bc = GetComponentInChildren<BoxCollider>();
         bc.size = newSize;
-        bc.center = new Vector3(0f, newSize.y / 2f, 0f);
-        
+        bc.center = newCenter;
+        Transform highlightCube = transform.parent.Find("HighlightCube");
+        highlightCube.localScale = newSize;
+        highlightCube.position = newCenter;
+        // trigger re-making of the highlight object:
+        transform.parent.GetComponent<VRTK.Highlighters.VRTK_OutlineObjectCopyHighlighter>().ResetHighlighter();
+
         for (int chindex = 1; chindex <= maxChannel; chindex++)
 		{
 			GameObject channelObject = new GameObject ("Channel " + chindex);
