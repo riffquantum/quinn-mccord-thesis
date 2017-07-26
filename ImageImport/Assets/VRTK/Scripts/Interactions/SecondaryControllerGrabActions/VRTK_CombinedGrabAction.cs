@@ -30,9 +30,13 @@ namespace VRTK.SecondaryControllerGrabActions
         public bool lockZAxis = false;
         [Tooltip("If checked all the axes will be scaled together (unless locked)")]
         public bool uniformScaling = false;
-        [Tooltip("The scaling factor for exaggerated scaling")]
-        public float exaggeratedScalingFactor = 1f;
+        [Tooltip("The smallest scaling factor that will be used")]
+        public float minScalingFactor = 0.1f;
+        [Tooltip("The maximum scaling factor allowed")]
+        public float maxScalingFactor = 10f;
         protected Vector3 initialScale;
+        protected Vector3 minScale;
+        protected Vector3 maxScale;
         protected float initalLength;
         protected float initialScaleFactor;
 
@@ -63,6 +67,8 @@ namespace VRTK.SecondaryControllerGrabActions
             base.Initialise(currentGrabbdObject, currentPrimaryGrabbingObject, currentSecondaryGrabbingObject, primaryGrabPoint, secondaryGrabPoint);
             //Axis Scale
             initialScale = currentGrabbdObject.transform.localScale;
+            minScale = initialScale * minScalingFactor;
+            maxScale = initialScale * maxScalingFactor;
             initalLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
             initialScaleFactor = currentGrabbdObject.transform.localScale.x / initalLength;
             //Control Dir
@@ -245,8 +251,16 @@ namespace VRTK.SecondaryControllerGrabActions
 
             if (finalScaleX > 0 && finalScaleY > 0 && finalScaleZ > 0)
             {
-                grabbedObject.transform.localScale = new Vector3(finalScaleX, finalScaleY, finalScaleZ); ;
+                grabbedObject.transform.localScale = ClampedFinalScale(finalScaleX, finalScaleY, finalScaleZ);
             }
+        }
+
+        protected Vector3 ClampedFinalScale(float scaleX, float scaleY, float scaleZ)
+        {
+            scaleX = Mathf.Clamp(scaleX, minScale.x, maxScale.x);
+            scaleY = Mathf.Clamp(scaleY, minScale.y, maxScale.y);
+            scaleZ = Mathf.Clamp(scaleZ, minScale.z, maxScale.z);
+            return new Vector3(scaleX, scaleY, scaleZ);
         }
 
         protected virtual void NonUniformScale()

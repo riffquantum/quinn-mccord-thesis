@@ -5677,8 +5677,9 @@ MonoBehaviour:
   lockYAxis: 0
   lockZAxis: 0
   uniformScaling: 1
-  exaggeratedScalingFactor: 5
-  releaseSnapSpeed: 0.1
+  minScalingFactor: 0.1
+  maxScalingFactor: 10
+  releaseSnapSpeed: Infinity
   lockZRotation: 0
 --- !u!114 &734305556
 MonoBehaviour:
