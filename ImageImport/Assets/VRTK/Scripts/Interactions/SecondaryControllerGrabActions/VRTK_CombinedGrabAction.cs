@@ -51,6 +51,7 @@ namespace VRTK.SecondaryControllerGrabActions
         protected Vector3 initialPosition;
         protected Quaternion initialRotation;
         protected Quaternion releaseRotation;
+        protected Vector3 initialGrabbingVector;
         protected Coroutine snappingOnRelease;
 
         /// <summary>
@@ -65,11 +66,12 @@ namespace VRTK.SecondaryControllerGrabActions
         public override void Initialise(VRTK_InteractableObject currentGrabbdObject, VRTK_InteractGrab currentPrimaryGrabbingObject, VRTK_InteractGrab currentSecondaryGrabbingObject, Transform primaryGrabPoint, Transform secondaryGrabPoint)
         {
             base.Initialise(currentGrabbdObject, currentPrimaryGrabbingObject, currentSecondaryGrabbingObject, primaryGrabPoint, secondaryGrabPoint);
+            initialGrabbingVector = secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position;
             //Axis Scale
             initialScale = currentGrabbdObject.transform.localScale;
             minScale = initialScale * minScalingFactor;
             maxScale = initialScale * maxScalingFactor;
-            initalLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
+            initalLength = initialGrabbingVector.magnitude;
             initialScaleFactor = currentGrabbdObject.transform.localScale.x / initalLength;
             //Control Dir
             initialPosition = currentGrabbdObject.transform.localPosition;
@@ -178,7 +180,9 @@ namespace VRTK.SecondaryControllerGrabActions
             }
             else
             {
-                transform.rotation = Quaternion.LookRotation(secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position, secondaryGrabbingObject.transform.TransformDirection(Vector3.forward));
+                Vector3 currentGrabbingVector = secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position;
+                Quaternion rotChange = Quaternion.FromToRotation(initialGrabbingVector, currentGrabbingVector);
+                transform.rotation = initialRotation * rotChange;
             }
 
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)
@@ -279,8 +283,8 @@ namespace VRTK.SecondaryControllerGrabActions
 
         protected virtual void UniformScale()
         {
-            float adjustedLength = (grabbedObject.transform.position - secondaryGrabbingObject.transform.position).magnitude;
-            float adjustedScale = initialScaleFactor * adjustedLength;
+            float currentLength = (secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position).magnitude;
+            float adjustedScale = initialScaleFactor * currentLength;
 
             var newScale = new Vector3(adjustedScale, adjustedScale, adjustedScale);
             ApplyScale(newScale);
