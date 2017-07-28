@@ -12,7 +12,7 @@ public class InstantiatePlanes : MonoBehaviour {
     public Text FrameCounterText;
     public Shader myShader;
     public Color[] channelColor;
-    public Texture[, ,] textures;
+    public Texture2D[, ,] textures;
     
     public float zScaleFactor = 100f;
 	public int numPlanesPerTex = 10;
@@ -23,6 +23,8 @@ public class InstantiatePlanes : MonoBehaviour {
     public string folderName;
 	public string baseName = "Susan_overnight";
 	private string imgSuffix = "_c{0:d2}_t{1:d4}_z{2:d4}";
+
+    private GraphParticles psGraph = null;
 
 	private int maxChannel = 0;
 	private int maxTime = 0;
@@ -83,7 +85,7 @@ public class InstantiatePlanes : MonoBehaviour {
 
         yield return null;
 		// Initialize the textures data structure to that size
-		textures = new Texture[maxChannel, maxTime, maxZ];
+		textures = new Texture2D[maxChannel, maxTime, maxZ];
 
 		yield return StartCoroutine (LoadTextures (maxChannel, maxTime, maxZ));
 	}
@@ -103,7 +105,7 @@ public class InstantiatePlanes : MonoBehaviour {
 					string currentTexFilename = folderName + "/" + baseName + string.Format(imgSuffix, chindex, timeindex, zindex);
 					//Debug.Log("Trying to load texture " + currentTexFilename);
 					//load Resource Texture And assign it
-					Texture newtexture = Resources.Load<Texture>(currentTexFilename);
+					Texture2D newtexture = Resources.Load<Texture2D>(currentTexFilename);
 					//Debug.Log ("Loaded " + newtexture);
 					textures[chindex - 1, timeindex - 1, zindex - 1] = newtexture;
 					loadedNum++;
@@ -134,13 +136,11 @@ public class InstantiatePlanes : MonoBehaviour {
 
         // size and position the box collider and particle system:
         Vector3 newSize = new Vector3(xPlaneScale * 10f, zSpacing * maxZ, yPlaneScale * 10f);
-        ParticleSystem ps = GetComponentInChildren<ParticleSystem>();
-        /*
-        ParticleSystem.ShapeModule shap = ps.shape;
-        shap.box = newSize;
-        ps.gameObject.transform.localPosition = new Vector3(0f, zSpacing * maxZ / 2f, 0f);
-        */
         Vector3 newCenter = new Vector3(0f, newSize.y / 2f, 0f);
+        if (psGraph != null)
+        {
+            psGraph.SetSizeAndCenter(newSize, newCenter);
+        }
         BoxCollider bc = GetComponentInChildren<BoxCollider>();
         bc.size = newSize;
         bc.center = newCenter;
@@ -158,7 +158,7 @@ public class InstantiatePlanes : MonoBehaviour {
 			{
 				GameObject zObject = new GameObject ("ZLevel " + zindex);
 				zObject.transform.SetParent (channelObject.transform);
-				Texture newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
+				Texture2D newTexture = textures [chindex - 1, frameCounter - 1, zindex - 1];
 				while (newTexture == null) {
 					Debug.Log ("CreatePlanes has to wait for texture loading");
                     yield return new WaitForSeconds (0.01f);
@@ -180,12 +180,11 @@ public class InstantiatePlanes : MonoBehaviour {
 					rend.material.shader = myShader;
                     rend.material.color = channelColor[chindex];
 					instantiatedPlane.transform.SetParent (zObject.transform);
-                    
-                    // test adding a static particle system in the same plane
-                    
-
 				}
-				yield return null;
+                // adding a static set of particles for the same texture-plane:
+                psGraph.AddParticlesFromTexture(newbasezValue + (zSpacing / 2f), newTexture, channelColor[chindex]);
+
+                yield return null;
 			}
 		}   
 		Debug.Log ("Created " + allPlanes.Count + " planes");
@@ -197,23 +196,24 @@ public class InstantiatePlanes : MonoBehaviour {
 			Debug.Log ("Not all planes have been created yet");
 			yield return new WaitForSeconds (0.01f);
 		}
-		List<GameObject>.Enumerator planeEnum = allPlanes.GetEnumerator();
+        float zSpacing = zPixSize * zScaleFactor;
+        List<GameObject>.Enumerator planeEnum = allPlanes.GetEnumerator();
 
+        psGraph.ClearParticles();
         for (int chindex = 1; chindex <= maxChannel; chindex++)
         {
             for (int zindex = 1; zindex <= maxZ; zindex++)
             {
-				Texture newTexture = textures[chindex - 1, newFrameCounter - 1, zindex - 1];
+				Texture2D newTexture = textures[chindex - 1, newFrameCounter - 1, zindex - 1];
 				if (newTexture == null) {
 					Debug.Log ("SetTexturesToPlanes has to wait for texture loading (ch " + chindex + " z " + zindex + ")");
-					while (newTexture == null) {
-                        if (ErrorText != null)
-                        {
-                            ErrorText.text = "Wait for texture to load";
-                        }
+                    if (ErrorText != null)
+                    {
+                        ErrorText.text = "Wait for texture to load";
+                    }
+                    while (newTexture == null) {
                         yield return new WaitForSeconds (0.01f);
-						newTexture = textures [chindex - 1, newFrameCounter - 1, zindex - 1];
-                        
+						newTexture = textures [chindex - 1, newFrameCounter - 1, zindex - 1];                        
 					}
                     ErrorText.text = "";
                 }
@@ -225,6 +225,9 @@ public class InstantiatePlanes : MonoBehaviour {
 					Renderer rend = planeEnum.Current.GetComponent<Renderer> ();
 					rend.material.SetTexture("_MainTex", newTexture);
                 }
+                // adding a static set of particles for the same texture-plane:
+                float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
+                psGraph.AddParticlesFromTexture(newbasezValue + (zSpacing / 2f), newTexture, channelColor[chindex]);
             }
         }        
 		yield return null;
@@ -232,8 +235,9 @@ public class InstantiatePlanes : MonoBehaviour {
     }
     
     void Start () {
-		
-		StartCoroutine(ReadTexturesFromFolder());
+		psGraph = GetComponentInChildren<GraphParticles>();
+
+        StartCoroutine(ReadTexturesFromFolder());
 
 		StartCoroutine(CreatePlanes());
 
