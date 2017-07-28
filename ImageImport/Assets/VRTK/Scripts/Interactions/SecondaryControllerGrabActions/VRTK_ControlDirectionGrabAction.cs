@@ -1,4 +1,4 @@
-﻿ // Control Direction Grab Action|SecondaryControllerGrabActions|60040
+﻿// Control Direction Grab Action|SecondaryControllerGrabActions|60040
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;
@@ -185,9 +185,5 @@ namespace VRTK.SecondaryControllerGrabActions
             // assign the one that involves less change to roll
             grabbedObject.transform.rotation = (upLockedAngle < rightLockedAngle ? upLocked : rightLocked);
         }
-
-
     }
-    
-    
 }
