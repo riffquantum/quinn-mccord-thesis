@@ -182,7 +182,7 @@ namespace VRTK.SecondaryControllerGrabActions
             {
                 Vector3 currentGrabbingVector = secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position;
                 Quaternion rotChange = Quaternion.FromToRotation(initialGrabbingVector, currentGrabbingVector);
-                transform.rotation = initialRotation * rotChange;
+                transform.localRotation = rotChange * initialRotation;
             }
 
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)

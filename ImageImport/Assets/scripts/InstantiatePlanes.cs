@@ -228,9 +228,9 @@ public class InstantiatePlanes : MonoBehaviour {
                 // adding a static set of particles for the same texture-plane:
                 float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
                 psGraph.AddParticlesFromTexture(newbasezValue + (zSpacing / 2f), newTexture, channelColor[chindex]);
+                yield return null;
             }
-        }        
-		yield return null;
+        }
 		textureSettingCoroutine = null;
     }
     
