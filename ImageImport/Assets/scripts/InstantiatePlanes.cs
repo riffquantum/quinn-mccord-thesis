@@ -18,7 +18,7 @@ public class InstantiatePlanes : MonoBehaviour {
 	public int numPlanesPerTex = 10;
     public float xyScaleFactor = 120f;
 
-    public int frameCounter = 1;
+    public static int frameCounter = 1;
     
     public string folderName;
 	public string baseName = "Susan_overnight";
@@ -287,7 +287,7 @@ public class InstantiatePlanes : MonoBehaviour {
             {
                 frameCounter = 1;
             }
-			StartNewTextureCoroutine (frameCounter);
+            StartNewTextureCoroutine (frameCounter);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -296,7 +296,7 @@ public class InstantiatePlanes : MonoBehaviour {
             {
                 frameCounter = maxTime;
             }
-			StartNewTextureCoroutine (frameCounter);
+            StartNewTextureCoroutine (frameCounter);
         }
     }
     

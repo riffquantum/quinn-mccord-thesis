@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f28de59f9a2e15646bb0d8e93847eaf6
+timeCreated: 1505925809
+licenseType: Pro
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - MitosisMarker: {fileID: 1817440129614114, guid: 467323c61bf4119489e3e90a09b3fa1c,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
