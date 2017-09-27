@@ -33,7 +33,7 @@ public class GraphParticles : MonoBehaviour
     public void SetSizeAndCenter(Vector3 newSize, Vector3 newCenter)
     {
         ParticleSystem.ShapeModule shap = this._particleSystem.shape;
-        shap.box = newSize;
+        shap.scale = newSize;
         this.shapeBox = newSize;
         this.gameObject.transform.localPosition = newCenter;
         this.UpdateCornerParticles();

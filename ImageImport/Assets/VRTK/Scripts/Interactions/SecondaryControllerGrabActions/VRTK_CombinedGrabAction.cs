@@ -1,4 +1,4 @@
-﻿//Combine Axis Scale and Control Direction Grab
+﻿ //Combine Axis Scale and Control Direction Grab
 namespace VRTK.SecondaryControllerGrabActions
 {
     using UnityEngine;

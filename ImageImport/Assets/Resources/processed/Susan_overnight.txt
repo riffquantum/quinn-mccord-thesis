@@ -1,0 +1,9 @@
+DatasetName:Susan_overnight
+NumberOfChannels:2
+NumberOfFrames:50
+XDimension:512
+YDimension:512
+ZDimension:25
+XPixelPhysicalSize:0.000830
+YPixelPhysicalSize:0.000830
+ZPixelPhysicalSize:0.000981
