@@ -1,30 +1,56 @@
 fileFormatVersion: 2
 guid: 4a21cfbb515610d42998567061870816
-timeCreated: 1505341123
-licenseType: Free
+timeCreated: 1507138273
+licenseType: Pro
 PluginImporter:
-  serializedVersion: 1
+  serializedVersion: 2
   iconMap: {}
   executionOrder: {}
   isPreloaded: 0
   isOverridable: 0
   platformData:
-    Android:
-      enabled: 0
-      settings:
-        CPU: ARMv7
-    Any:
-      enabled: 0
-      settings: {}
-    Editor:
-      enabled: 1
-      settings:
-        CPU: X86
-        DefaultValueInitialized: true
-        OS: Windows
-    Win:
-      enabled: 1
-      settings: {}
+    data:
+      first:
+        '': Editor
+      second:
+        enabled: 0
+        settings:
+          CPU: X86
+          OS: Windows
+    data:
+      first:
+        Android: Android
+      second:
+        enabled: 0
+        settings:
+          CPU: ARMv7
+    data:
+      first:
+        Any: 
+      second:
+        enabled: 0
+        settings: {}
+    data:
+      first:
+        Editor: Editor
+      second:
+        enabled: 1
+        settings:
+          CPU: X86
+          DefaultValueInitialized: true
+          OS: Windows
+    data:
+      first:
+        Facebook: Win
+      second:
+        enabled: 1
+        settings: {}
+    data:
+      first:
+        Standalone: Win
+      second:
+        enabled: 1
+        settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
