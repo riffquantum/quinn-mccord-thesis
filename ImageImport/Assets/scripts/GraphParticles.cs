@@ -15,7 +15,7 @@ public class GraphParticles : MonoBehaviour
 {
     public const int MAX_PARTICLES = 100000;
     [Tooltip("Minimal alpha value (up to 255) that will generate a particle.")]
-    public int alphaCutoff = 100;
+    public int alphaCutoff = 75;
 
     private ParticleSystem.Particle[] particles = new ParticleSystem.Particle[MAX_PARTICLES];
     private const int MAX_RESERVED_INDEX = 7; // first eight particles reserved for corners
