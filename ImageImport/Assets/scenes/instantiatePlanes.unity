@@ -10342,7 +10342,7 @@ MonoBehaviour:
   throwVelocityWithAttachDistance: 0
   throwMultiplier: 1
   onGrabCollisionDelay: 0
-  detachDistance: 1
+  detachDistance: 100
   velocityLimit: Infinity
   angularVelocityLimit: Infinity
 --- !u!114 &734305553
@@ -10409,7 +10409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91fa28e5f90b9bb498ddaa9808967f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ungrabDistance: 4
+  ungrabDistance: 400
   lockXAxis: 0
   lockYAxis: 0
   lockZAxis: 0
