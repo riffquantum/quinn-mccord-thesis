@@ -1977,7 +1977,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: -1555557673
+  randomSeed: 1336897864
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -5159,7 +5159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f04dbb7d9d8f146bc4611d8bc430e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alphaCutoff: 75
+  alphaCutoff: 100
 --- !u!1 &151296197 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: b919c9a603e259e4d9c5e1a9ac369caf, type: 3}
@@ -10318,8 +10318,8 @@ Rigidbody:
   m_GameObject: {fileID: 734305549}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 10
-  m_AngularDrag: 30
+  m_Drag: 1
+  m_AngularDrag: 3
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -10389,7 +10389,7 @@ MonoBehaviour:
   validDrop: 1
   grabOverrideButton: 0
   allowedGrabControllers: 0
-  grabAttachMechanicScript: {fileID: 0}
+  grabAttachMechanicScript: {fileID: 734305552}
   secondaryGrabActionScript: {fileID: 734305555}
   isUsable: 0
   holdButtonToUse: 1
@@ -11025,10 +11025,10 @@ GameObject:
   - component: {fileID: 802940679}
   - component: {fileID: 802940678}
   - component: {fileID: 802940677}
-  - component: {fileID: 802940676}
   - component: {fileID: 802940680}
   - component: {fileID: 802940681}
   - component: {fileID: 802940682}
+  - component: {fileID: 802940676}
   m_Layer: 0
   m_Name: RightController
   m_TagString: Untagged
@@ -11057,7 +11057,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 802940674}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fc65878c7102524bb8c2bcfbefff497, type: 3}
+  m_Script: {fileID: 11500000, guid: bd904f4ca6767424eaf8e050bc174741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playareaCursor: {fileID: 0}
@@ -11075,14 +11075,18 @@ MonoBehaviour:
   invalidCollisionColor: {r: 1, g: 0, b: 0, a: 1}
   tracerVisibility: 0
   cursorVisibility: 0
-  maximumLength: 100
-  scaleFactor: 0.002
-  cursorScaleMultiplier: 5
+  maximumLength: {x: 20, y: Infinity}
+  tracerDensity: 20
+  cursorRadius: 1
+  heightLimitAngle: 100
+  curveOffset: 1
+  rescaleTracer: 0
   cursorMatchTargetRotation: 0
-  cursorDistanceRescale: 0
-  maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
+  collisionCheckFrequency: 0
   customTracer: {fileID: 0}
   customCursor: {fileID: 0}
+  validLocationObject: {fileID: 0}
+  invalidLocationObject: {fileID: 0}
 --- !u!114 &802940677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11189,18 +11193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnTriggerPressed:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 802940674}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: VRTK.UnityEventHelper.VRTK_ControllerEvents_UnityEvents+ControllerInteractionEvent,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   OnTriggerReleased:
@@ -15787,7 +15780,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1403335257
 Transform:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ using VRTK;
 public class CreateMarker : MonoBehaviour {
 
     public GameObject MitosisMarker;
-    public Transform TargetParent; //the Interaction ovject
+    public Transform TargetParent; //the Interaction object
     public static int frame = InstantiatePlanes.frameCounter;
 
 	/* Update is called once per frame
@@ -18,12 +18,22 @@ public class CreateMarker : MonoBehaviour {
             }  
 	}
     */
+
     public void PlaceMarker(int frameNumber, Vector3 pos)
     {
         //update frame from instantiate planes script
         frame = InstantiatePlanes.frameCounter;
+
+        //if (touchpad is pressed){
+        //make TargetParent = laser pointer ground cursor}
+
         //instantiate new marker 
         GameObject newMarker = Instantiate(MitosisMarker, pos, Quaternion.identity, TargetParent); 
+        
+       
+        
+        
+        
         //access tooltip comopnent and set display text to current frame
         VRTK_ObjectTooltip textTooltip = newMarker.GetComponent<VRTK_ObjectTooltip>();
         textTooltip.displayText = frameNumber.ToString();
