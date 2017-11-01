@@ -187,7 +187,7 @@ namespace VRTK.SecondaryControllerGrabActions
 
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)
             {
-                transform.Translate(primaryGrabbingObject.controllerAttachPoint.transform.position - primaryInitialGrabPoint.position, Space.World);
+                //transform.Translate(primaryGrabbingObject.controllerAttachPoint.transform.position - primaryInitialGrabPoint.position, Space.World);
             }
         }
 
