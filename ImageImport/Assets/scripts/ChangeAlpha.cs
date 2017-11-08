@@ -3,41 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ChangeAlpha : MonoBehaviour {
-    public float chan1Alpha, chan2Alpha, chan3Alpha, chan4Alpha, chan5Alpha;
+
+    //public float red, green, blue, alpha;
+    public float channelAlpha;//, chan2Alpha;
     
-    public void Chan1Change (float alphaValue)
+    public void Chan1Change (float value)
     {
-        this.chan1Alpha = alphaValue;
-        SetAlpha();
+        this.channelAlpha = value;
+        //this.red = value;
+        SetColor();
     }
 
-    public void Chan2Change(float alphaValue)
+    /*
+    public void Chan2Change(float value)
     {
-        this.chan2Alpha = alphaValue;
-        SetAlpha();
+        this.chan2Alpha = value;
+        //this.green = value;
+        SetColor();
     }
 
-    public void Chan3Change(float alphaValue)
+    
+    public void Chan3Change(float value)
     {
-        this.chan3Alpha = alphaValue;
-        SetAlpha();
+        //this.chan2Alpha = value;
+        this.blue = value;
+        SetColor();
     }
 
-    public void Chan4Change(float alphaValue)
+    public void Chan4Change(float value)
     {
-        this.chan4Alpha = alphaValue;
-        SetAlpha();
+        //this.chan2Alpha = value;
+        this.alpha = value;
+        SetColor();
+    }
+    */
+    public void SetColor()
+    {
+
+        GameObject chan1 = GameObject.Find("Channel 1");
+        chan1.GetComponentInChildren<Renderer>().material.color = new Color(0, 0, 0, channelAlpha);
+
+        Color rend = GetComponent<Renderer>().material.color = new Color(255,255,255,channelAlpha);
+        
+
+        //rend.a = channelAlpha;
+       
+        //Debug.Log("red value " + red + " green value " + green + " blue value " + blue + " alpha value " + alpha);
+
     }
 
-    public void Chan5Change(float alphaValue)
-    {
-        this.chan5Alpha = alphaValue;
-        SetAlpha();
-    }
-
-    public void SetAlpha()
-    {
-        Color rend = GetComponent<Renderer>().material.color;
-        rend.a = chan1Alpha;
-    }
 }

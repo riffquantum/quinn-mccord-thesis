@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Mono.Data.Sqlite;
 using System.Data;
@@ -24,13 +25,17 @@ public class DB_Script : MonoBehaviour {
         while (reader.Read())
         {
             int cellID = reader.GetInt32(0);
-            byte[] verts = GetBytes(reader, 1);
-            byte[] edges = GetBytes(reader, 2);
+            byte[] verts = GetBytes(reader, 1); //groups of 3 floats
+            byte[] edges = GetBytes(reader, 2); 
             byte[] normals = GetBytes(reader, 3);
             byte[] faces = GetBytes(reader, 4);
             // edges should be a list of integers, two each for one edge:
             Debug.Log("Length of edges: " + edges.Length);
-
+            int[] edgeInts = BytesToInts(edges);
+            Debug.Log("edgeInts: len " + edgeInts.Length + " min " + edgeInts.Min() + " max " + edgeInts.Max());
+            Debug.Log("Length of verts: " + verts.Length);
+            float[] vertFloats = BytesToFloats(verts);
+            Debug.Log("vertFloats: len " + vertFloats.Length + " min " + vertFloats.Min() + " max " + vertFloats.Max());
 
             Debug.Log("cellID= " + cellID + " verts =" + verts + "  edges =" + edges + " normals =" + normals + " faces=" + faces);
             break;
@@ -41,6 +46,28 @@ public class DB_Script : MonoBehaviour {
         dbcmd = null;
         dbconn.Close();
         dbconn = null;
+    }
+
+    private int[] BytesToInts(byte[] bytes)
+    {
+        int STEPSIZE = 4;
+        int[] result = new int[bytes.Length / STEPSIZE];
+        for (int i = 0; i < bytes.Length; i += STEPSIZE)
+        {
+            result[i / STEPSIZE] = BitConverter.ToInt32(bytes, i);
+        }
+        return result;
+    }
+
+    private float[] BytesToFloats(byte[] bytes)
+    {
+        int STEPSIZE = 4;
+        float[] result = new float[bytes.Length / STEPSIZE];
+        for (int i = 0; i < bytes.Length; i += STEPSIZE)
+        {
+            result[i / STEPSIZE] = BitConverter.ToSingle(bytes, i);
+        }
+        return result;
     }
 
     /// <summary>
