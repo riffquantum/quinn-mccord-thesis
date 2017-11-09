@@ -20,12 +20,10 @@ public class DB_Script : MonoBehaviour {
         string sqlQuery = "SELECT cellID,verts,edges,normals, faces " + "FROM tblCells where cellID == 1 ";
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
-        
-
         while (reader.Read())
         {
             int cellID = reader.GetInt32(0);
-            byte[] verts = GetBytes(reader, 1); //groups of 3 floats
+            byte[] verts = GetBytes(reader, 1);
             byte[] edges = GetBytes(reader, 2); 
             byte[] normals = GetBytes(reader, 3);
             byte[] faces = GetBytes(reader, 4);
@@ -33,9 +31,15 @@ public class DB_Script : MonoBehaviour {
             Debug.Log("Length of edges: " + edges.Length);
             int[] edgeInts = BytesToInts(edges);
             Debug.Log("edgeInts: len " + edgeInts.Length + " min " + edgeInts.Min() + " max " + edgeInts.Max());
+            //verts should be a list of floats, three for x,y,z coordinates
             Debug.Log("Length of verts: " + verts.Length);
             float[] vertFloats = BytesToFloats(verts);
             Debug.Log("vertFloats: len " + vertFloats.Length + " min " + vertFloats.Min() + " max " + vertFloats.Max());
+            //faces should be a list of ints, three for each triangle
+            Debug.Log("Length of faces: " + faces.Length);
+            int[] faceInts = BytesToInts(faces);
+            Debug.Log("faceInts: len " + faceInts.Length + " min " + faceInts.Min() + " max " + edgeInts.Max());
+            //normals???
 
             Debug.Log("cellID= " + cellID + " verts =" + verts + "  edges =" + edges + " normals =" + normals + " faces=" + faces);
             break;
@@ -93,7 +97,7 @@ public class DB_Script : MonoBehaviour {
                 curPos += bufferSize;
             }
         }
-        //Debug.Log(result);
+      
         return result;
          
     }
