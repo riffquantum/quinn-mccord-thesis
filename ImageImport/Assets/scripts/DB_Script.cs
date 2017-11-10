@@ -8,7 +8,7 @@ using System;
 
 
 public class DB_Script : MonoBehaviour {
-
+    public float[] verticesFloats;
 	// Use this for initialization
 	void Start () {
         string conn = "URI=file:" + Application.dataPath + "/Susan_overnight.LEVER"; //Path to database.
@@ -34,6 +34,7 @@ public class DB_Script : MonoBehaviour {
             //verts should be a list of floats, three for x,y,z coordinates
             Debug.Log("Length of verts: " + verts.Length);
             float[] vertFloats = BytesToFloats(verts);
+            verticesFloats = vertFloats;
             Debug.Log("vertFloats: len " + vertFloats.Length + " min " + vertFloats.Min() + " max " + vertFloats.Max());
             //faces should be a list of ints, three for each triangle
             Debug.Log("Length of faces: " + faces.Length);
@@ -42,6 +43,7 @@ public class DB_Script : MonoBehaviour {
             //normals???
 
             Debug.Log("cellID= " + cellID + " verts =" + verts + "  edges =" + edges + " normals =" + normals + " faces=" + faces);
+
             break;
         }
         reader.Close();
