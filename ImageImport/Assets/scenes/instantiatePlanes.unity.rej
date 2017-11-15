@@ -1,0 +1,10 @@
+diff a/ImageImport/Assets/scenes/instantiatePlanes.unity b/ImageImport/Assets/scenes/instantiatePlanes.unity	(rejected hunks)
+@@ -18644,7 +18644,7 @@
+   UIfeedbackText: {fileID: 583420018}
+   ErrorText: {fileID: 2021284599}
+   FrameCounterText: {fileID: 733461902}
+-  myShader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
++  myShader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 3}
+   channelColor:
+   - {r: 1, g: 1, b: 1, a: 1}
+   - {r: 0, g: 1, b: 0.08965516, a: 1}

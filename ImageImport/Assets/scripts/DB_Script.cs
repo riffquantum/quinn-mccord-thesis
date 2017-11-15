@@ -8,21 +8,54 @@ using System;
 
 
 public class DB_Script : MonoBehaviour {
-    public float[] verticesFloats;
-	// Use this for initialization
-	void Start () {
+    public int frameCounter = 1;
+    public GameObject HullsParent;
+    public GameObject HullPrefab;
+    private IDbConnection dbconn;
+
+    public void CreateHullObjects(int frameCounter) {
+        // first get rid of previous hull objects:
+        //TODO not working!
+        foreach (Transform child in HullsParent.transform)
+        {
+            Destroy(child);
+        }
+        this.frameCounter = frameCounter;
+        QueryDBForHulls();
+    }
+
+    private void CreateSingleHull(int hullNr, List<Vector3> vertices, List<Vector3> normals, int[] faceInts) {
+        Mesh mesh = new Mesh();
+        mesh.SetVertices(vertices);
+        mesh.SetNormals(normals);
+        mesh.SetTriangles(faceInts, 0);
+        // create new game object with parent HullsParent for the mesh:
+        GameObject newGO = Instantiate(HullPrefab, HullsParent.transform);
+        newGO.name = "Hull" + hullNr;
+        newGO.GetComponent<MeshFilter>().mesh = mesh;
+    }
+
+    void Start() {
         string conn = "URI=file:" + Application.dataPath + "/Susan_overnight.LEVER"; //Path to database.
-        IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         Debug.Log("opening database");
         dbconn.Open(); //Open connection to the database.
+        CreateHullObjects(frameCounter);
+    }
+
+    void OnApplicationQuit() {
+        dbconn.Close();
+        dbconn = null;
+    }
+
+    void QueryDBForHulls() { 
         IDbCommand dbcmd = dbconn.CreateCommand();
-        string sqlQuery = "SELECT cellID,verts,edges,normals, faces " + "FROM tblCells where cellID == 1 ";
+        string sqlQuery = "SELECT cellID,verts,edges,normals,faces FROM tblCells where time == " + frameCounter;
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
         {
-            int cellID = reader.GetInt32(0);
+            int cellID = reader.GetInt32(0); 
             byte[] verts = GetBytes(reader, 1);
             byte[] edges = GetBytes(reader, 2); 
             byte[] normals = GetBytes(reader, 3);
@@ -30,28 +63,25 @@ public class DB_Script : MonoBehaviour {
             // edges should be a list of integers, two each for one edge:
             Debug.Log("Length of edges: " + edges.Length);
             int[] edgeInts = BytesToInts(edges);
-            Debug.Log("edgeInts: len " + edgeInts.Length + " min " + edgeInts.Min() + " max " + edgeInts.Max());
+            //Debug.Log("edgeInts: len " + edgeInts.Length + " min " + edgeInts.Min() + " max " + edgeInts.Max());
             //verts should be a list of floats, three for x,y,z coordinates
             Debug.Log("Length of verts: " + verts.Length);
-            float[] vertFloats = BytesToFloats(verts);
-            verticesFloats = vertFloats;
-            Debug.Log("vertFloats: len " + vertFloats.Length + " min " + vertFloats.Min() + " max " + vertFloats.Max());
+            List<Vector3> vertFloats = FloatsToVector3s(BytesToFloats(verts));
+            //Debug.Log("vertFloats: len " + vertFloats.Length + " min " + vertFloats.Min() + " max " + vertFloats.Max());
             //faces should be a list of ints, three for each triangle
             Debug.Log("Length of faces: " + faces.Length);
             int[] faceInts = BytesToInts(faces);
             Debug.Log("faceInts: len " + faceInts.Length + " min " + faceInts.Min() + " max " + edgeInts.Max());
             //normals???
+            List<Vector3> normalFloats = FloatsToVector3s(BytesToFloats(normals));
 
             Debug.Log("cellID= " + cellID + " verts =" + verts + "  edges =" + edges + " normals =" + normals + " faces=" + faces);
-
-            break;
+            CreateSingleHull(cellID, vertFloats, normalFloats, faceInts);
         }
         reader.Close();
         reader = null;
         dbcmd.Dispose();
         dbcmd = null;
-        dbconn.Close();
-        dbconn = null;
     }
 
     private int[] BytesToInts(byte[] bytes)
@@ -75,6 +105,18 @@ public class DB_Script : MonoBehaviour {
         }
         return result;
     }
+
+    private List<Vector3> FloatsToVector3s(float[] floats)
+    {
+        int STEPSIZE = 3;
+        List<Vector3> result = new List<Vector3>(floats.Length / STEPSIZE);
+        for (int i = 0; i < floats.Length; i += STEPSIZE)
+        {
+            result.Add(new Vector3(floats[i], floats[i + 1], floats[i + 2]));
+        }
+        return result;
+    }
+
 
     /// <summary>
     /// Reads all available bytes from reader

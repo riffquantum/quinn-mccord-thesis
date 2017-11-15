@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using VRTK;
 
 public class InstantiatePlanes : MonoBehaviour {
+    public DB_Script DBScript;
 	public Text UIfeedbackText;
     public Text ErrorText;
     public Text FrameCounterText;
@@ -310,6 +311,7 @@ public class InstantiatePlanes : MonoBehaviour {
 		}
 		textureSettingCoroutine = SetTexturesToPlanes(frameCounter);
 		StartCoroutine (textureSettingCoroutine);
+        DBScript.CreateHullObjects(frameCounter);
 	}
     
 }
