@@ -635,6 +635,66 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 24254948}
+--- !u!1 &24740918 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000010482306814, guid: 84c8b8609f9bb434eaf5248f17ff1293,
+    type: 2}
+  m_PrefabInternal: {fileID: 620333767}
+--- !u!114 &24740920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 24740918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4376e16e4e009cc4c8d04752f919840a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: 2
+  mHandState: 0
+  AttachPoint: {fileID: 24740921}
+  IgnoreContactPoint: 0
+--- !u!54 &24740921
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 24740918}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &24740922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 24740918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b26f999cbdac8478b6c2a046256169, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activationButton: 0
+  activationMode: 2
+  selectionButton: 0
+  clickMethod: 0
+  attemptClickOnDeactivate: 0
+  clickAfterHoverDuration: 0
+  controller: {fileID: 802940678}
+  pointerOriginTransform: {fileID: 0}
+  hoveringElement: {fileID: 0}
+  controllerRenderModel: {fileID: 0}
+  hoverDurationTimer: 0
+  canClickOnHover: 0
+  autoActivatingCanvas: {fileID: 0}
+  collisionClick: 0
 --- !u!1 &33567380 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 30d3ece068e70094c94e204d0360b7a6, type: 3}
@@ -11710,6 +11770,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000011404857786, guid: 84c8b8609f9bb434eaf5248f17ff1293,
+        type: 2}
+      propertyPath: handScript
+      value: 
+      objectReference: {fileID: 2055005055}
+    - target: {fileID: 114000010372160784, guid: 84c8b8609f9bb434eaf5248f17ff1293,
+        type: 2}
+      propertyPath: handScript
+      value: 
+      objectReference: {fileID: 24740920}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 84c8b8609f9bb434eaf5248f17ff1293, type: 2}
   m_IsPrefabParent: 0
@@ -21760,7 +21830,7 @@ MonoBehaviour:
   UIfeedbackText: {fileID: 583420018}
   ErrorText: {fileID: 2021284599}
   FrameCounterText: {fileID: 733461902}
-  myShader: {fileID: 10800, guid: 0000000000000000f000000000000000, type: 0}
+  myShader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
   channelColor:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0, g: 1, b: 0.08965516, a: 1}
@@ -27429,6 +27499,41 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2053486909}
+--- !u!1 &2055005053 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000011125779090, guid: 84c8b8609f9bb434eaf5248f17ff1293,
+    type: 2}
+  m_PrefabInternal: {fileID: 620333767}
+--- !u!114 &2055005055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2055005053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4376e16e4e009cc4c8d04752f919840a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: 1
+  mHandState: 0
+  AttachPoint: {fileID: 2055005056}
+  IgnoreContactPoint: 0
+--- !u!54 &2055005056
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2055005053}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &2055602041
 Prefab:
   m_ObjectHideFlags: 0
