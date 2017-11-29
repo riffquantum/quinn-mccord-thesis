@@ -39,6 +39,7 @@ public class DB_Script : MonoBehaviour {
         newGO.tag = "Hull";
         newGO.layer = 5;
         newGO.GetComponent<MeshFilter>().mesh = mesh;
+        
     }
 
     void Start() {
