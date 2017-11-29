@@ -15,11 +15,15 @@ public class DB_Script : MonoBehaviour {
 
     public void CreateHullObjects(int frameCounter) {
         // first get rid of previous hull objects:
-        //TODO not working!
-        foreach (Transform child in HullsParent.transform)
+        GameObject[] HullsToDelete;
+        HullsToDelete = GameObject.FindGameObjectsWithTag("Hull");
+        foreach (GameObject child in HullsToDelete)
         {
-            Destroy(child);
+            
+                Destroy(child);
+            
         }
+
         this.frameCounter = frameCounter;
         QueryDBForHulls();
     }
@@ -32,6 +36,8 @@ public class DB_Script : MonoBehaviour {
         // create new game object with parent HullsParent for the mesh:
         GameObject newGO = Instantiate(HullPrefab, HullsParent.transform);
         newGO.name = "Hull" + hullNr;
+        newGO.tag = "Hull";
+        newGO.layer = 5;
         newGO.GetComponent<MeshFilter>().mesh = mesh;
     }
 
@@ -50,7 +56,7 @@ public class DB_Script : MonoBehaviour {
 
     void QueryDBForHulls() { 
         IDbCommand dbcmd = dbconn.CreateCommand();
-        string sqlQuery = "SELECT cellID,verts,edges,normals,faces FROM tblCells where time == " + frameCounter;
+        string sqlQuery = "SELECT cellID,verts,edges,normals,faces FROM tblCells where channel == 1 AND time == " + frameCounter;
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
