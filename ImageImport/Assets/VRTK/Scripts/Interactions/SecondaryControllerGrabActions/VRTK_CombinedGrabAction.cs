@@ -52,6 +52,8 @@ namespace VRTK.SecondaryControllerGrabActions
         protected Quaternion initialRotation;
         protected Quaternion releaseRotation;
         protected Vector3 initialGrabbingVector;
+        protected Vector3 pivotPoint;
+        protected GameObject pivotSphere;
         protected Coroutine snappingOnRelease;
 
         /// <summary>
@@ -67,6 +69,12 @@ namespace VRTK.SecondaryControllerGrabActions
         {
             base.Initialise(currentGrabbdObject, currentPrimaryGrabbingObject, currentSecondaryGrabbingObject, primaryGrabPoint, secondaryGrabPoint);
             initialGrabbingVector = secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position;
+            // attach point on the object for rotation:
+            pivotPoint = transform.InverseTransformPoint(primaryGrabbingObject.transform.position);
+            pivotSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            pivotSphere.transform.parent = this.gameObject.transform;
+            pivotSphere.transform.localPosition = pivotPoint;
+            pivotSphere.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             //Axis Scale
             initialScale = currentGrabbdObject.transform.localScale;
             minScale = initialScale * minScalingFactor;
@@ -135,6 +143,8 @@ namespace VRTK.SecondaryControllerGrabActions
                     transform.localRotation = initialRotation;
                 }
             }
+            Destroy(pivotSphere);
+            pivotSphere = null;
             base.ResetAction();
         }
 
@@ -182,7 +192,26 @@ namespace VRTK.SecondaryControllerGrabActions
             {
                 Vector3 currentGrabbingVector = secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position;
                 Quaternion rotChange = Quaternion.FromToRotation(initialGrabbingVector, currentGrabbingVector);
+                // need to rotate around the point where we grabbed the object:
+                //pivotPoint = transform.InverseTransformPoint(primaryGrabbingObject.transform.position);
+                //pivotSphere.transform.localPosition = pivotPoint;
+                Vector3 scaledPivot = pivotPoint;
+                scaledPivot.Scale(transform.localScale);
+                // first subtract the rotation point then add it back:
+                transform.localPosition += (transform.rotation * scaledPivot);
                 transform.localRotation = rotChange * initialRotation;
+                transform.localPosition -= (transform.rotation * scaledPivot);
+                if (true)
+                {
+                    Debug.DrawRay(transform.position, transform.rotation * Vector3.up, Color.black);
+                    Debug.DrawRay(transform.position, transform.rotation * Vector3.right, Color.black);
+                    Debug.DrawRay(transform.position, transform.rotation * Vector3.forward, Color.black);
+
+                    Debug.DrawRay(transform.position + (transform.rotation * scaledPivot), transform.rotation * Vector3.up, Color.green);
+                    Debug.DrawRay(transform.position + (transform.rotation * scaledPivot), transform.rotation * Vector3.right, Color.red);
+                    Debug.DrawRay(transform.position + (transform.rotation * scaledPivot), transform.rotation * Vector3.forward, Color.blue);
+                }
+
             }
 
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)

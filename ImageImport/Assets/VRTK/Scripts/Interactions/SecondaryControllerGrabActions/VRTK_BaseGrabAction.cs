@@ -16,7 +16,7 @@ namespace VRTK.SecondaryControllerGrabActions
         protected VRTK_InteractGrab secondaryGrabbingObject;
         protected Transform primaryInitialGrabPoint;
         protected Transform secondaryInitialGrabPoint;
-        protected bool initialised = false;
+        public bool initialised = false;
         protected bool isActionable = true;
         protected bool isSwappable = false;
 

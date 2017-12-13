@@ -23,26 +23,30 @@ public class SetPivot : MonoBehaviour {
 
     public void LeftSetPivotLocation()
     {
-        if (OVRInput.Axis1D.SecondaryHandTrigger == 0)
-        {
+       
+        //if (OVRInput.Axis1D.SecondaryHandTrigger == 0)
+        //{
             PivotPointLocation.transform.position = LControllerPosition;
             Debug.Log(PivotPointLocation.transform.position);
-        }
+           
+       // }
         
     }
     public void RightSetPivotLocation()
     {
-        if (OVRInput.Axis1D.PrimaryHandTrigger == 0)
-        {
+        //if (OVRInput.Axis1D.PrimaryHandTrigger == 0)
+        //{
             PivotPointLocation.transform.position = RControllerPosition;
             Debug.Log(PivotPointLocation.transform.position);
-        }
+       // }
         
     }
 
     public void Release()
     {
         Debug.Log("Released");
+        //detach children
+        this.transform.DetachChildren();
     }
 
 }

@@ -32,6 +32,16 @@ namespace VRTK.GrabAttachMechanics
             {
                 return;
             }
+            if (grabbedObjectScript != null)
+            {
+                if (grabbedObjectScript.secondaryGrabActionScript != null)
+                {
+                    if (grabbedObjectScript.secondaryGrabActionScript.initialised)
+                    {
+                        return;
+                    }
+                }
+            }
 
             float maxDistanceDelta = 10f;
             //Vector3 positionDelta = trackPoint.position - (grabbedSnapHandle != null ? grabbedSnapHandle.position : grabbedObject.transform.position);
