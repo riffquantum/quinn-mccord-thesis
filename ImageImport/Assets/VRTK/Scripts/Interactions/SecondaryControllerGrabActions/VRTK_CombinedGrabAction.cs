@@ -84,6 +84,7 @@ namespace VRTK.SecondaryControllerGrabActions
             //Control Dir
             initialPosition = currentGrabbdObject.transform.localPosition;
             initialRotation = currentGrabbdObject.transform.localRotation;
+            
             StopRealignOnRelease();
 
         }
@@ -107,7 +108,7 @@ namespace VRTK.SecondaryControllerGrabActions
             {
                 AimObject();
             }
-
+            
             if (initialised)
             {
                 if (uniformScaling)
@@ -192,7 +193,8 @@ namespace VRTK.SecondaryControllerGrabActions
             {
                 Vector3 currentGrabbingVector = secondaryGrabbingObject.transform.position - primaryGrabbingObject.transform.position;
                 Quaternion rotChange = Quaternion.FromToRotation(initialGrabbingVector, currentGrabbingVector);
-                // need to rotate around the point where we grabbed the object:
+                
+                //need to rotate around the point where we grabbed the object:
                 //pivotPoint = transform.InverseTransformPoint(primaryGrabbingObject.transform.position);
                 //pivotSphere.transform.localPosition = pivotPoint;
                 Vector3 scaledPivot = pivotPoint;
@@ -284,7 +286,13 @@ namespace VRTK.SecondaryControllerGrabActions
 
             if (finalScaleX > 0 && finalScaleY > 0 && finalScaleZ > 0)
             {
+                Vector3 scaledPivot = pivotPoint;
+                scaledPivot.Scale(transform.localScale);
+                transform.localPosition += (transform.rotation * scaledPivot);
                 grabbedObject.transform.localScale = ClampedFinalScale(finalScaleX, finalScaleY, finalScaleZ);
+                scaledPivot = pivotPoint;
+                scaledPivot.Scale(transform.localScale);
+                transform.localPosition -= (transform.rotation * scaledPivot);
             }
         }
 
