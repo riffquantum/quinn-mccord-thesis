@@ -272,10 +272,12 @@ public class InstantiatePlanes : MonoBehaviour {
         if (e.touchpadAxis.x > 0)
         {
             frameForward();
+            FrameCounterText.text = "Frame: " + frameCounter;
         }
         else if (e.touchpadAxis.x < 0)
         {
             frameBack();
+            FrameCounterText.text = "Frame: " + frameCounter;
         }
     }
 

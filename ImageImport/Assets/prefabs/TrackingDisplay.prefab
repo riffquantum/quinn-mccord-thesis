@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4508343222456522}
   - component: {fileID: 23855067109100706}
   - component: {fileID: 102435719277790290}
+  - component: {fileID: 114811916952329308}
   m_Layer: 0
   m_Name: TrackingDisplay
   m_TagString: Untagged
@@ -96,3 +97,14 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &114811916952329308
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1300925167215294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01acbea69fae10442add73cd42383c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

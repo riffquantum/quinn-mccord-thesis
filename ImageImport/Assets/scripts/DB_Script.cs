@@ -46,7 +46,7 @@ public class DB_Script : MonoBehaviour {
         trackDisplay.name = "Track" + hullNr;
         trackDisplay.layer = 5;
         trackDisplay.transform.parent = newGO.transform;
-        trackDisplay.transform.position = newGO.transform.position;
+        trackDisplay.transform.localPosition = mesh.bounds.center;
         trackDisplay.GetComponent<TextMesh>().text = hullNr.ToString();
         //trackDisplay.transform.LookAt(Camera.main.transform);
     }
