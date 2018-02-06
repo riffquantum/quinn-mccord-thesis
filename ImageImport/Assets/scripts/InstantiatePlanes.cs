@@ -241,7 +241,8 @@ public class InstantiatePlanes : MonoBehaviour {
         StartCoroutine(ReadTexturesFromFolder());
 
 		StartCoroutine(CreatePlanes());
-
+        FrameCounterText.text = "Frame: " + frameCounter;
+        Debug.Log("Updated Frame Text");
     }
 	public void frameForward()
     {
@@ -252,6 +253,7 @@ public class InstantiatePlanes : MonoBehaviour {
             frameCounter = 1;
         }
         StartNewTextureCoroutine(frameCounter);
+        
     }
 
     public void frameBack()
@@ -262,6 +264,7 @@ public class InstantiatePlanes : MonoBehaviour {
             frameCounter = maxTime;
         }
         StartNewTextureCoroutine(frameCounter);
+        
     }
     public void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
     {
@@ -289,6 +292,7 @@ public class InstantiatePlanes : MonoBehaviour {
                 frameCounter = 1;
             }
             StartNewTextureCoroutine (frameCounter);
+            FrameCounterText.text = "Frame: " + frameCounter;
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -298,7 +302,9 @@ public class InstantiatePlanes : MonoBehaviour {
                 frameCounter = maxTime;
             }
             StartNewTextureCoroutine (frameCounter);
+            FrameCounterText.text = "Frame: " + frameCounter;
         }
+        
     }
     
 

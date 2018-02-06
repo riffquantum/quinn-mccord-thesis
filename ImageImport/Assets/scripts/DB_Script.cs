@@ -11,6 +11,7 @@ public class DB_Script : MonoBehaviour {
     public int frameCounter = 1;
     public GameObject HullsParent;
     public GameObject HullPrefab;
+    public GameObject TrackingDisplay;
     private IDbConnection dbconn;
 
     public void CreateHullObjects(int frameCounter) {
@@ -35,11 +36,19 @@ public class DB_Script : MonoBehaviour {
         mesh.SetTriangles(faceInts, 0);
         // create new game object with parent HullsParent for the mesh:
         GameObject newGO = Instantiate(HullPrefab, HullsParent.transform);
-        newGO.name = "Hull" + hullNr;
+        newGO.name = "Track" + hullNr;
         newGO.tag = "Hull";
         newGO.layer = 5;
         newGO.GetComponent<MeshFilter>().mesh = mesh;
-        
+
+        //create child GO to display Track number always facing the camera
+        GameObject trackDisplay = Instantiate(TrackingDisplay, HullsParent.transform);
+        trackDisplay.name = "Track" + hullNr;
+        trackDisplay.layer = 5;
+        trackDisplay.transform.parent = newGO.transform;
+        trackDisplay.transform.position = newGO.transform.position;
+        trackDisplay.GetComponent<TextMesh>().text = hullNr.ToString();
+        //trackDisplay.transform.LookAt(Camera.main.transform);
     }
 
     void Start() {
@@ -57,12 +66,12 @@ public class DB_Script : MonoBehaviour {
 
     void QueryDBForHulls() { 
         IDbCommand dbcmd = dbconn.CreateCommand();
-        string sqlQuery = "SELECT cellID,verts,edges,normals,faces FROM tblCells where channel == 1 AND time == " + frameCounter;
+        string sqlQuery = "SELECT trackID,verts,edges,normals,faces FROM tblCells where channel == 1 AND time == " + frameCounter;
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
         {
-            int cellID = reader.GetInt32(0); 
+            int trackID = reader.GetInt32(0); 
             byte[] verts = GetBytes(reader, 1);
             byte[] edges = GetBytes(reader, 2); 
             byte[] normals = GetBytes(reader, 3);
@@ -82,8 +91,8 @@ public class DB_Script : MonoBehaviour {
             //normals???
             List<Vector3> normalFloats = FloatsToVector3s(BytesToFloats(normals));
 
-            Debug.Log("cellID= " + cellID + " verts =" + verts + "  edges =" + edges + " normals =" + normals + " faces=" + faces);
-            CreateSingleHull(cellID, vertFloats, normalFloats, faceInts);
+            Debug.Log("trackID= " + trackID + " verts =" + verts + "  edges =" + edges + " normals =" + normals + " faces=" + faces);
+            CreateSingleHull(trackID, vertFloats, normalFloats, faceInts);
         }
         reader.Close();
         reader = null;
