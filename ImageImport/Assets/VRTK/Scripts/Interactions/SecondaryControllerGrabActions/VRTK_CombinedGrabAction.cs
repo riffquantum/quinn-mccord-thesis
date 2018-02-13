@@ -203,6 +203,9 @@ namespace VRTK.SecondaryControllerGrabActions
                 transform.localPosition += (transform.rotation * scaledPivot);
                 transform.localRotation = rotChange * initialRotation;
                 transform.localPosition -= (transform.rotation * scaledPivot);
+
+                /*
+                //creates a sphere with rays to show the rotation
                 if (true)
                 {
                     Debug.DrawRay(transform.position, transform.rotation * Vector3.up, Color.black);
@@ -213,7 +216,7 @@ namespace VRTK.SecondaryControllerGrabActions
                     Debug.DrawRay(transform.position + (transform.rotation * scaledPivot), transform.rotation * Vector3.right, Color.red);
                     Debug.DrawRay(transform.position + (transform.rotation * scaledPivot), transform.rotation * Vector3.forward, Color.blue);
                 }
-
+                */
             }
 
             if (grabbedObject.grabAttachMechanicScript.precisionGrab)

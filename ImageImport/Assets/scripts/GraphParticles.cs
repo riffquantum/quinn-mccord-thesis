@@ -28,6 +28,8 @@ public class GraphParticles : MonoBehaviour
     void Awake()
     {
         this._particleSystem = GetComponent<ParticleSystem>();
+        this._particleSystem.Play();
+        this._particleSystem.Pause();
     }
 
     public void SetSizeAndCenter(Vector3 newSize, Vector3 newCenter)

@@ -16,17 +16,12 @@ public class DB_Script : MonoBehaviour {
 
     public void CreateHullObjects(int frameCounter) {
         // first get rid of previous hull objects:
-        GameObject[] HullsToDelete;
-        HullsToDelete = GameObject.FindGameObjectsWithTag("Hull");
-        foreach (GameObject child in HullsToDelete)
-        {
-            
-                Destroy(child);
-            
+        foreach (Transform child in HullsParent.transform)
+        {   
+                Destroy(child.gameObject);
         }
-
         this.frameCounter = frameCounter;
-        QueryDBForHulls();
+        StartCoroutine(QueryDBForHulls());
     }
 
     private void CreateSingleHull(int hullNr, List<Vector3> vertices, List<Vector3> normals, int[] faceInts) {
@@ -64,11 +59,12 @@ public class DB_Script : MonoBehaviour {
         dbconn = null;
     }
 
-    void QueryDBForHulls() { 
+    IEnumerator QueryDBForHulls() { 
         IDbCommand dbcmd = dbconn.CreateCommand();
         string sqlQuery = "SELECT trackID,verts,edges,normals,faces FROM tblCells where channel == 1 AND time == " + frameCounter;
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
+        int yieldcounter = 0;
         while (reader.Read())
         {
             int trackID = reader.GetInt32(0); 
@@ -93,6 +89,11 @@ public class DB_Script : MonoBehaviour {
 
             Debug.Log("trackID= " + trackID + " verts =" + verts + "  edges =" + edges + " normals =" + normals + " faces=" + faces);
             CreateSingleHull(trackID, vertFloats, normalFloats, faceInts);
+            yieldcounter++;
+            if (yieldcounter > 20) {
+                yield return null;
+                yieldcounter = 0;
+            }
         }
         reader.Close();
         reader = null;

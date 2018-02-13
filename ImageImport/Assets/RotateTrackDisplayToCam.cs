@@ -7,6 +7,9 @@ public class RotateTrackDisplayToCam : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        if (Camera.main == null) {
+            return;
+        }
         Vector3 v = Camera.main.transform.position - transform.position;
         v.x = v.z = 0.0f;
         transform.LookAt(Camera.main.transform.position - v);

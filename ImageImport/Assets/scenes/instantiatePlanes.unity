@@ -331,17 +331,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1000010482306814, guid: 84c8b8609f9bb434eaf5248f17ff1293,
     type: 2}
   m_PrefabInternal: {fileID: 620333767}
---- !u!114 &24740920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 24740918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4376e16e4e009cc4c8d04752f919840a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &24740921
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2968,7 +2957,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 131454361}
   serializedVersion: 5
-  lengthInSec: 5
+  lengthInSec: 100000
   simulationSpeed: 1
   stopAction: 0
   looping: 0
@@ -2976,7 +2965,7 @@ ParticleSystem:
   playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
-  useRigidbodyForVelocity: 1
+  useRigidbodyForVelocity: 0
   startDelay:
     serializedVersion: 2
     minMaxState: 0
@@ -2989,12 +2978,12 @@ ParticleSystem:
         time: 0
         value: 0
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
         time: 1
-        value: 1
-        inSlope: 1
+        value: 0
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
       m_PreInfinity: 2
@@ -3007,12 +2996,12 @@ ParticleSystem:
         time: 0
         value: 0
         inSlope: 0
-        outSlope: 0.5
+        outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
         time: 1
-        value: 0.5
-        inSlope: 0.5
+        value: 0
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
       m_PreInfinity: 2
@@ -3021,14 +3010,14 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: -1612139734
+  randomSeed: -1438445893
   InitialModule:
     serializedVersion: 3
     enabled: 1
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 1e+20
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -3111,7 +3100,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.8745098, g: 0.11764706, b: 0.11764706, a: 0.15294118}
+      maxColor: {r: 0.8745098, g: 0.11764706, b: 0.11764706, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -12967,15 +12956,15 @@ Prefab:
         type: 2}
       propertyPath: handScript
       value: 
-      objectReference: {fileID: 2055005055}
+      objectReference: {fileID: 0}
     - target: {fileID: 114000010372160784, guid: 84c8b8609f9bb434eaf5248f17ff1293,
         type: 2}
       propertyPath: handScript
       value: 
-      objectReference: {fileID: 24740920}
+      objectReference: {fileID: 0}
     - target: {fileID: 11437430, guid: 84c8b8609f9bb434eaf5248f17ff1293, type: 2}
       propertyPath: StartWithControllers
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 84c8b8609f9bb434eaf5248f17ff1293, type: 2}
@@ -19222,7 +19211,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 0}
@@ -20082,6 +20071,10 @@ Prefab:
     - target: {fileID: 100002, guid: dfc668c129d73e041a2703d5a1c1fa7a, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: dfc668c129d73e041a2703d5a1c1fa7a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dfc668c129d73e041a2703d5a1c1fa7a, type: 3}
@@ -27942,7 +27935,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1793383324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28538,7 +28531,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1858857904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29476,7 +29469,6 @@ GameObject:
   - component: {fileID: 1972834574}
   - component: {fileID: 1972834573}
   - component: {fileID: 1972834572}
-  - component: {fileID: 1972834576}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -29560,19 +29552,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1972834576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1972834571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1518a5e598c7da244bc4850d3ae63354, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clickOnPointerCollision: 0
-  autoActivateWithinDistance: 0
 --- !u!1001 &1973771853
 Prefab:
   m_ObjectHideFlags: 0
@@ -30718,17 +30697,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1000011125779090, guid: 84c8b8609f9bb434eaf5248f17ff1293,
     type: 2}
   m_PrefabInternal: {fileID: 620333767}
---- !u!114 &2055005055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2055005053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4376e16e4e009cc4c8d04752f919840a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &2055005056
 Rigidbody:
   m_ObjectHideFlags: 0
