@@ -81,8 +81,8 @@ public class InstantiatePlanes : MonoBehaviour {
         Debug.Log ("Read from file: channels " + maxChannel);
 		Debug.Log ("Read from file: frames " + maxTime);
 		Debug.Log ("Read from file: Z " + maxZ);
-        Debug.Log("Read from file: xy dimensions " + xDim + " " + yDim);
-        Debug.Log("Read from file: xyz pixel size " + xPixSize + " " + yPixSize + " " + zPixSize);
+        Debug.Log ("Read from file: xy dimensions " + xDim + " " + yDim);
+        Debug.Log ("Read from file: xyz pixel size " + xPixSize + " " + yPixSize + " " + zPixSize);
 
         yield return null;
 		// Initialize the textures data structure to that size
