@@ -38,7 +38,7 @@ public class DB_Script : MonoBehaviour {
 
         //create child GO to display Track number always facing the camera
         GameObject trackDisplay = Instantiate(TrackingDisplay, HullsParent.transform);
-        trackDisplay.name = "Track" + hullNr;
+        trackDisplay.name = "TrackDisplay " + hullNr;
         trackDisplay.layer = 5;
         trackDisplay.transform.parent = newGO.transform;
         trackDisplay.transform.localPosition = mesh.bounds.center;

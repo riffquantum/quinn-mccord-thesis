@@ -1,0 +1,9 @@
+DatasetName:Bock11_Colored
+NumberOfChannels:4
+NumberOfFrames:1
+XDimension:256
+YDimension:512
+ZDimension:600
+XPixelPhysicalSize:128
+YPixelPhysicalSize:128
+ZPixelPhysicalSize:40
