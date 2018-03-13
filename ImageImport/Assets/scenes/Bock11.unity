@@ -16419,7 +16419,7 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0.13103461, a: 1}
   - {r: 0, g: 1, b: 1, a: 1}
-  zScaleFactor: 0.008333334
+  zScaleFactor: 0.0078125
   numPlanesPerTex: 1
   xyScaleFactor: 0.0078125
   folderName: resizefull
