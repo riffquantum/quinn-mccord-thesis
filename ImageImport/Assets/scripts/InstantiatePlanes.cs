@@ -16,6 +16,7 @@ public class InstantiatePlanes : MonoBehaviour {
     public Texture2D[, ,] textures;
     
     public float zScaleFactor = 100f;
+    public float zDistanceCutoffForParticles = 5f;
 	public int numPlanesPerTex = 10;
     public float xyScaleFactor = 120f;
 
@@ -26,8 +27,9 @@ public class InstantiatePlanes : MonoBehaviour {
 	private string imgSuffix = "_c{0:d2}_t{1:d4}_z{2:d4}";
 
     private GraphParticles psGraph = null;
+    private ClosestPointForCollider closestPointTracker = null;
 
-	private int maxChannel = 0;
+    private int maxChannel = 0;
 	private int maxTime = 0;
 	private int maxZ = 0;
     private int xDim = 0;
@@ -40,6 +42,12 @@ public class InstantiatePlanes : MonoBehaviour {
     private IEnumerator textureSettingCoroutine = null;
 
 	public List<GameObject> allPlanes = new List<GameObject> ();
+
+    void Awake()
+    {
+        this.closestPointTracker = GetComponent<ClosestPointForCollider>();
+    }
+
 
 	private string getREGEXValueFromText(string txtContents, string matchstring) {
 		Regex regChan = new Regex (matchstring, RegexOptions.IgnoreCase);
@@ -183,8 +191,7 @@ public class InstantiatePlanes : MonoBehaviour {
 					instantiatedPlane.transform.SetParent (zObject.transform);
 				}
                 // adding a static set of particles for the same texture-plane:
-                psGraph.AddParticlesFromTexture(newbasezValue + (zSpacing / 2f), newTexture, channelColor[chindex]);
-
+                SendTextureToParticleSystem(newbasezValue + (zSpacing / 2f), newTexture, channelColor[chindex]);
                 yield return null;
 			}
 		}   
@@ -205,36 +212,51 @@ public class InstantiatePlanes : MonoBehaviour {
         {
             for (int zindex = 1; zindex <= maxZ; zindex++)
             {
-				Texture2D newTexture = textures[chindex - 1, newFrameCounter - 1, zindex - 1];
-				if (newTexture == null) {
-					Debug.Log ("SetTexturesToPlanes has to wait for texture loading (ch " + chindex + " z " + zindex + ")");
+                Texture2D newTexture = textures[chindex - 1, newFrameCounter - 1, zindex - 1];
+                if (newTexture == null)
+                {
+                    Debug.Log("SetTexturesToPlanes has to wait for texture loading (ch " + chindex + " z " + zindex + ")");
                     if (ErrorText != null)
                     {
                         ErrorText.text = "Wait for texture to load";
                     }
-                    while (newTexture == null) {
-                        yield return new WaitForSeconds (0.01f);
-						newTexture = textures [chindex - 1, newFrameCounter - 1, zindex - 1];                        
-					}
+                    while (newTexture == null)
+                    {
+                        yield return new WaitForSeconds(0.01f);
+                        newTexture = textures[chindex - 1, newFrameCounter - 1, zindex - 1];
+                    }
                     ErrorText.text = "";
                 }
-				for (int i = 0; i < numPlanesPerTex; i++)
-                {					
-					//Debug.Log("chindex = " + chindex + ", zindex = " + zindex + ", numPlanesPerTex = " + i + ", frameCounter = " + newFrameCounter);
-					// move the enum one forward, trusting that it contains exactly the right number of planes:
-					planeEnum.MoveNext ();
-					Renderer rend = planeEnum.Current.GetComponent<Renderer> ();
-					rend.material.SetTexture("_MainTex", newTexture);
+                for (int i = 0; i < numPlanesPerTex; i++)
+                {
+                    //Debug.Log("chindex = " + chindex + ", zindex = " + zindex + ", numPlanesPerTex = " + i + ", frameCounter = " + newFrameCounter);
+                    // move the enum one forward, trusting that it contains exactly the right number of planes:
+                    planeEnum.MoveNext();
+                    Renderer rend = planeEnum.Current.GetComponent<Renderer>();
+                    rend.material.SetTexture("_MainTex", newTexture);
                 }
                 // adding a static set of particles for the same texture-plane:
                 float newbasezValue = zSpacing * (zindex - 1) + (chindex - 1) * ((zSpacing / numPlanesPerTex) / 2);
-                psGraph.AddParticlesFromTexture(newbasezValue + (zSpacing / 2f), newTexture, channelColor[chindex]);
+                SendTextureToParticleSystem(newbasezValue + (zSpacing / 2f), newTexture, channelColor[chindex]);
                 yield return null;
             }
         }
 		textureSettingCoroutine = null;
     }
-    
+
+    private void SendTextureToParticleSystem(float zValue, Texture2D newTexture, Color color)
+    {
+        // first decide if want this texture as particles:
+        Vector3 closestPoint = this.closestPointTracker.closestPoint;
+        Vector3 localClosestPoint = this.transform.InverseTransformPoint(closestPoint);
+        Debug.Log("Closest Point " + closestPoint + " in local space " + localClosestPoint + " zValue " + zValue);
+        if (Mathf.Abs(localClosestPoint.z - zValue) > zDistanceCutoffForParticles)
+        {
+            return;
+        }
+        psGraph.AddParticlesFromTexture(zValue, newTexture, color);
+    }
+
     void Start () {
 		psGraph = GetComponentInChildren<GraphParticles>();
 

@@ -65,7 +65,7 @@ public class GraphParticles : MonoBehaviour
     public void AddParticlesFromTexture(float zValue, Texture2D tex, Color partColor)
     {
         // TODO: temp disable. Undo!
-        return;
+        //return;
         // iterate through the texture pixels, add new particle with this color if the alpha is high enough
         // x and z are the texture dimension, y is layers (incoming zValue):
         float y = (-shapeBox.y / 2f) + zValue;

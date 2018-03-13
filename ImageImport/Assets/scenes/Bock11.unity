@@ -1688,7 +1688,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: -1945207324
+  randomSeed: 1251933446
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -16390,6 +16390,7 @@ GameObject:
   - component: {fileID: 1514383697}
   - component: {fileID: 1514383695}
   - component: {fileID: 1514383698}
+  - component: {fileID: 1514383699}
   m_Layer: 0
   m_Name: InstantiatePlanes
   m_TagString: Untagged
@@ -16485,6 +16486,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 75, y: 9, z: 75}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1514383699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1514383694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f86e8e57d12c9c4b90d303f62610449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coll: {fileID: 0}
+  focusObject: {fileID: 68893037}
 --- !u!1 &1517768774
 GameObject:
   m_ObjectHideFlags: 0
