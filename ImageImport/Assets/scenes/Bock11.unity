@@ -1688,7 +1688,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 1251933446
+  randomSeed: 230836118
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -5316,7 +5316,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &150723959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16421,6 +16421,7 @@ MonoBehaviour:
   - {r: 0, g: 1, b: 0.13103461, a: 1}
   - {r: 0, g: 1, b: 1, a: 1}
   zScaleFactor: 0.0078125
+  zDistanceCutoffForParticles: 5
   numPlanesPerTex: 1
   xyScaleFactor: 0.0078125
   folderName: resizefull

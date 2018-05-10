@@ -156,6 +156,7 @@ public class InstantiatePlanes : MonoBehaviour {
         Transform highlightCube = transform.parent.Find("HighlightCube");
         highlightCube.localScale = newSize;
         highlightCube.position = newCenter;
+        
         // trigger re-making of the highlight object:
         transform.parent.GetComponent<VRTK.Highlighters.VRTK_OutlineObjectCopyHighlighter>().ResetHighlighter();
 
