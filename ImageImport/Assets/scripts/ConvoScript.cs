@@ -14,14 +14,14 @@ public class ConvoScript : MonoBehaviour {
 
     [SerializeField]
     private fsSerializer _serializer = new fsSerializer();
-    private string stt_username = "02f9ad07-26fa-4fab-8439-10c5060e8962";
-    private string stt_password = "Gv6bkxpDDfDL";
-    private string stt_url = "https://stream.watsonplatform.net/speech-to-text/api";
+    private string stt_username = "";
+    private string stt_password = "";
+    private string stt_url = "";
 
-    private string convo_username = "862e662e-e037-41be-94a0-d70132e47ed9";
-    private string convo_password = "LgKmQN8jOP8v";
-    private string convo_url = "https://gateway.watsonplatform.net/conversation/api";
-    private string convo_workspaceId = "ba7a4ab7-5249-4c72-bf71-112e886a12eb";
+    private string convo_username = "";
+    private string convo_password = "";
+    private string convo_url = "";
+    private string convo_workspaceId = "";
 
     public Text ResultsField;
 
